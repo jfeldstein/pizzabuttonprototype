@@ -15,6 +15,11 @@ class pizzabuttonapp.Views.PizzaPickerView extends Backbone.View
     @model.add_pizza(type)
     @updateUI()
 
+  remove_pizza: (e) => 
+    type = $(e.target).parents('[data-pizza-type]').data('pizza-type')
+    @model.remove_pizza(type)
+    @updateUI()
+
   template_data: ->
     # Rolls up individual pizzas into totals
     order_summary = @model.summary()

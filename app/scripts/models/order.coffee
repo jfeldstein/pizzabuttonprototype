@@ -18,6 +18,14 @@ class pizzabuttonapp.Models.OrderModel extends Backbone.Model
 
     @set 'pizzas', pizzas
 
+  remove_pizza: (type) ->
+    pizzas = @get('pizzas')
+
+    if pizzas[type]?
+      pizzas[type].quantity -= 1
+
+    @set 'pizzas', pizzas
+
   existing_size_for_type: (type) => 
     if @get('pizzas')[type]? 
       return @get('pizzas')[type].size 
