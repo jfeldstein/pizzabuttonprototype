@@ -21,8 +21,7 @@ class pizzabuttonapp.Views.PizzaPickerView extends Backbone.View
 
     pizza_selection = _.map pizzabuttonapp.Config.pizza_types, (type) ->
       # Does the order already include pizzas of the given type? 
-      order_of_this_type = _.find order_summary.pizzas, (order_of_a_type) ->
-        order_of_a_type.type == type
+      order_of_this_type = order_summary.pizzas[type]
 
       # If not found, start with these defaults
       order_of_this_type ||= 
