@@ -61,7 +61,6 @@ class pizzabuttonapp.Views.PizzaPickerView extends Backbone.View
 
     _.each data_from_view(), (pizza_type) =>
       for i in [0...pizza_type['quantity']]
-        console.log "adding 1", pizza_type['type']
         @order.add_pizza
           type: pizza_type['type']
           size: pizza_type['size']
