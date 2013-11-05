@@ -7,7 +7,7 @@ class pizzabuttonapp.Views.PizzaPickerView extends Backbone.View
   events: 
     'click .js-add-pizza':    'add_pizza'
     'click .js-remove-pizza': 'remove_pizza'
-    'change .js-size':        'update_pizzas'
+    'change .js-size':        'resize_pizza'
     'click .js-continue':     'finish'
 
   add_pizza: (e) => 
@@ -18,6 +18,12 @@ class pizzabuttonapp.Views.PizzaPickerView extends Backbone.View
   remove_pizza: (e) => 
     type = $(e.target).parents('[data-pizza-type]').data('pizza-type')
     @model.remove_pizza(type)
+    @updateUI()
+
+  resize_pizza: (e) => 
+    type = $(e.target).parents('[data-pizza-type]').data('pizza-type')
+    new_size = $(e.target).val()
+    @model.resize_pizza(type, new_size)
     @updateUI()
 
   template_data: ->
@@ -60,15 +66,6 @@ class pizzabuttonapp.Views.PizzaPickerView extends Backbone.View
 
       $el.find('.js-quantity').text type_quantity
       $el.find('.js-size').val type_size
-
-  update_pizzas: (e) => 
-    @order.clear_pizzas()
-
-    _.each data_from_view(), (pizza_type) =>
-      for i in [0...pizza_type['quantity']]
-        @order.add_pizza
-          type: pizza_type['type']
-          size: pizza_type['size']
 
   finish: => 
     @options.next_step()
