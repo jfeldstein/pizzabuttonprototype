@@ -5,5 +5,4 @@
 
 pizzabuttonapp.Views.ViewPusher = 
   render: (el) ->
-    console.log "Got the new el", el
-    $('#container').html el.outerHTML
+    $('#container').html('').append(el)

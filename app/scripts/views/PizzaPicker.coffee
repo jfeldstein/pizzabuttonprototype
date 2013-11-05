@@ -7,21 +7,65 @@ class pizzabuttonapp.Views.PizzaPickerView extends Backbone.View
   events: 
     'click .js-add-pizza':    'add_pizza'
     'click .js-remove-pizza': 'remove_pizza'
-    'change .js-pizza-size':  'update_sizes'
+    'change .js-size':        'update_pizzas'
     'click .js-continue':     'finish'
 
-  render: ->
-    @$el.html @template()
-    pizzabuttonapp.Views.ViewPusher.render @el
-
   add_pizza: (e) => 
-    #
+    type = $(e.target).parents('[data-pizza-type]').data('pizza-type')
+    @model.add_pizza(type)
+    @updateUI()
 
-  remove_pizza: (e) => 
-    #
+  template_data: ->
+    # Rolls up individual pizzas into totals
+    order_summary = @model.summary()
 
-  update_sizes: (e) => 
-    #
+    pizza_selection = _.map pizzabuttonapp.Config.pizza_types, (type) ->
+      # Does the order already include pizzas of the given type? 
+      order_of_this_type = _.find order_summary.pizzas, (order_of_a_type) ->
+        order_of_a_type.type == type
+
+      # If not found, start with these defaults
+      order_of_this_type ||= 
+        size: pizzabuttonapp.Config.pizza_sizes[0].code
+        quantity: 0
+
+      # Apply in-order quantities and sizes to the list of types of pizzas
+      _.extend type, 
+        size:     order_of_this_type.size
+        quantity: order_of_this_type.quantity
+
+    # Return this hash:
+    pizzas: pizza_selection
+    pizza_sizes: pizzabuttonapp.Config.pizza_sizes
+
+  render: =>
+    @$el.html @template @template_data()
+    pizzabuttonapp.Views.ViewPusher.render @el
+    @delegateEvents()
+    @updateUI()
+
+  updateUI: =>
+    pizzas = @model.summary().pizzas
+
+    @$('[data-pizza-type]').each (i, el) =>
+      $el = $(el)
+      type = $el.data('pizza-type')
+
+      type_quantity = if pizzas[type]? then pizzas[type].quantity else 0
+      type_size     = if pizzas[type]? then pizzas[type].size else pizzabuttonapp.Config.pizza_sizes[0].code
+
+      $el.find('.js-quantity').text type_quantity
+      $el.find('.js-size').val type_size
+
+  update_pizzas: (e) => 
+    @order.clear_pizzas()
+
+    _.each data_from_view(), (pizza_type) =>
+      for i in [0...pizza_type['quantity']]
+        console.log "adding 1", pizza_type['type']
+        @order.add_pizza
+          type: pizza_type['type']
+          size: pizza_type['size']
 
   finish: => 
     @options.next_step()

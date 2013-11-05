@@ -1,2 +1,30 @@
-<p>Your content here.</p>
+<ul>
+  
+  <% for(var i=0; i<pizzas.length; i++) { %>
+    <li data-pizza-type="<%= pizzas[i].type %>">
+      <ul>
+        <li><%= pizzas[i].friendly_name %></li>
+        <li>
+            Quantity: 
+            <span class="js-quantity"><%=pizzas[i].quantity %></span>
 
+            <br />
+
+            <button class="js-add-pizza">+</button>
+            <button class="js-remove-pizza">-</button>
+        </li>
+        <li>
+            Size: 
+            <select class="js-size">
+              <% for(var j=0; j<pizza_sizes.length; j++) { %>
+                <option value="<%= pizza_sizes[j].code %>" <%= (pizzas[i].size==pizza_sizes[j].code) ? 'SELECTED' : '' %>><%= pizza_sizes[j].friendly_name %></option>
+              <% } %>
+            </select>
+        </li>
+      </ul>
+    </li>
+  <% } %>
+
+</ul>
+
+<button class='js-continue'>Next</button>
