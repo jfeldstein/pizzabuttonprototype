@@ -11,7 +11,8 @@ class pizzabuttonapp.Views.PizzaPickerView extends Backbone.View
     'click .js-continue':     'finish'
 
   render: ->
-    console.log "Rendering new pizza picker"
+    @$el.html @template()
+    pizzabuttonapp.Views.ViewPusher.render @el
 
   add_pizza: (e) => 
     #
