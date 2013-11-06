@@ -4,6 +4,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
   routes:
     'orders/new':      'new_order'
     'sessions/new':    'new_session'
+    'wait_for_loc':    'wait_for_location'
     'no_restaurants':  'out_of_area'
     'addresses/new':   'new_address'
     'credit_cards/new':'new_credit_card'
@@ -11,11 +12,15 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     'orders/:id':      'show_order'
 
   new_order: ->
-    order = new pizzabuttonapp.Models.OrderModel
+    @order = new pizzabuttonapp.Models.OrderModel
     pizzapicker = new pizzabuttonapp.Views.PizzaPickerView 
       model: order
-      next_step: @new_address
+      next_step: =>
+        @new_address()
     pizzapicker.render()
+
+  wait_for_location: -> 
+    #
 
   new_session: ->
     #
