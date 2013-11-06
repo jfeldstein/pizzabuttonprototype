@@ -13,18 +13,18 @@ class pizzabuttonapp.Views.PizzaPickerView extends pizzabuttonapp.Views.BaseView
   add_pizza: (e) => 
     type_id = $(e.target).parents('[data-pizza-type-id]').data('pizza-type-id')
     @model.add_pizza(type_id)
-    @updateUI()
+    @render()
 
   remove_pizza: (e) => 
     type_id = $(e.target).parents('[data-pizza-type-id]').data('pizza-type-id')
     @model.remove_pizza(type_id)
-    @updateUI()
+    @render()
 
   resize_pizza: (e) => 
     type_id = $(e.target).parents('[data-pizza-type-id]').data('pizza-type-id')
     new_size_id = $(e.target).val()
     @model.resize_pizza(type_id, new_size_id)
-    @updateUI()
+    @render()
 
   template_data: ->
     # Rolls up individual pizzas into totals
@@ -53,23 +53,6 @@ class pizzabuttonapp.Views.PizzaPickerView extends pizzabuttonapp.Views.BaseView
     pizzas: pizza_selection
     pizza_sizes: pizzabuttonapp.Config.pizza_sizes
     has_selected_pizza: has_selected_pizza
-
-  render: =>
-    super
-    @updateUI()
-
-  updateUI: =>
-    pizzas = @model.summary().pizzas
-
-    @$('[data-pizza-type-id]').each (i, el) =>
-      $el = $(el)
-      type_id = $el.data('pizza-type-id')
-
-      quantity = if pizzas[type_id]? then pizzas[type_id].quantity else 0
-      size     = if pizzas[type_id]? then pizzas[type_id].size_id else pizzabuttonapp.Config.pizza_sizes[0].id
-
-      $el.find('.js-quantity').text quantity
-      $el.find('.js-size').val size
 
   finish: => 
     @options.next_step()
