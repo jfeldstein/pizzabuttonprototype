@@ -48,8 +48,15 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
       message:        "Looking for pizza parlours..."
 
   ensure_address: ->
-    if pizzabuttonapp.State.user? and pizzabuttonapp.State.user.get_primary_address()?
+    if pizzabuttonapp.State.user? and pizzabuttonapp.State.user.has_primary_address()
       # TODO: Are we near the address? If not, we still need a new one / user to pick.
+      # ...
+
+      # Apply the existing address to this order
+      default_address = pizzabuttonapp.State.user.get_primary_address()
+      pizzabuttonapp.State.order.set_delivery_address default_address
+      
+      # Continue to checking CC
       @navigate 'ensure_cc', 
         trigger: true
     else
@@ -58,6 +65,11 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
 
   ensure_cc: -> 
     if pizzabuttonapp.State.user? and pizzabuttonapp.State.user.has_primary_cc()
+      # Apply the existing cc to this order
+      default_cc = pizzabuttonapp.State.user.get_primary_cc()
+      pizzabuttonapp.State.order.set_billing_cc default_cc
+
+      # Continue to summary / confirmation
       @navigate 'orders/confirm', 
         trigger: true
     else
@@ -87,9 +99,20 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     add_credit_card.render()
 
   confirm_order: ->
-    console.log("CONFIRM ORDER", pizzabuttonapp.State.order)
+    confirm_order = new pizzabuttonapp.Views.ConfirmOrderView
+      model: pizzabuttonapp.State.order
+      next_step: =>
+        @submit_order()
+    confirm_order.render()
 
   show_order: ->
     #
+
+  submit_order: ->
+    # TODO: Send the order up to the server
+
+    # Then, 
+    @navigate "orders/#{pizzabuttonapp.State.order.get('id')}",
+      trigger: true
 
   

@@ -31,8 +31,23 @@ window.pizzabuttonapp =
 
     # TODO: Have the user stay logged in between app-loads
     pizzabuttonapp.State.user = new pizzabuttonapp.Models.UserModel
+    #  addresses: new pizzabuttonapp.Collections.AddressCollection [
+    #    street: "301 Crestmont"
+    #    city:   "San Francisco"
+    #    state:  "CA"
+    #    zip:    "94131"
+    #  ]
+    #  credit_card: new pizzabuttonapp.Models.CreditCardModel
+    #    number:     '1234123412341234'
+    #    name:       'Jordan Feldstein'
+    #    exp_month:  '08'
+    #    exp_year:   '15'
+    #    zip:        '93131'
+    #    cvv:        '123'
+    #  phone_number: '8472824467'
 
     pizzabuttonapp.State.order = new pizzabuttonapp.Models.OrderModel
+      customer: pizzabuttonapp.State.user
 
     getLocation (loc) =>
       @State.location = loc

@@ -6,8 +6,12 @@ class pizzabuttonapp.Models.UserModel extends Backbone.Model
   defaults: 
     addresses: new pizzabuttonapp.Collections.AddressCollection
 
+  has_primary_address: ->
+    @get_addresses().length >= 1
+
   get_primary_address: ->
-    null #new pizzabuttonapp.Models.AddressModel
+    # "Primary" address is currently just the first address
+    @get('addresses').at 0
 
   get_addresses: ->
     @get('addresses')
