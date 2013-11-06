@@ -28,7 +28,9 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
         @navigate "wait_for_restaurants", 
           trigger: true
       continue_when:  -> pizzabuttonapp.State.location? 
-      give_up:        => @out_of_area() 
+      give_up:        => 
+        @navigate 'no_restaurants',
+          trigger: true 
       message:        "Waiting for location..."
 
   wait_for_restaurants: ->
@@ -80,7 +82,8 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     #
 
   out_of_area: ->
-    console.log "NO LOCATION"
+    out_of_area = new pizzabuttonapp.Views.OutOfAreaView
+    out_of_area.render()
 
   new_address: =>
     pick_or_add_address = new pizzabuttonapp.Views.PickOrAddAddressView
