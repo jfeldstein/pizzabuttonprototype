@@ -7,7 +7,9 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     'wait_for_loc':    'wait_for_location'
     'wait_for_restaurants': 'wait_for_restaurants'
     'no_restaurants':  'out_of_area'
+    'ensure_address':  'ensure_address'
     'addresses/new':   'new_address'
+    'ensure_cc':       'ensure_cc'
     'credit_cards/new':'new_credit_card'
     'orders/confirm':  'confirm_order'
     'orders/:id':      'show_order'
@@ -22,32 +24,45 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     pizzapicker.render()
 
   wait_for_location: -> 
-    seconds_to_wait  = 3
-    poll_interval_ms = 100
-    poll_counter     = 0
-
-    poll_for_location = =>
-      if pizzabuttonapp.State.location? 
+    new ensureAndWaitFor
+      continue: =>
         @navigate "wait_for_restaurants", 
           trigger: true
-      else if poll_counter * poll_interval_ms / 1000 < seconds_to_wait
-        poll_counter++
-        setTimeout poll_for_location, poll_interval_ms
-      else
-        # Give up
-        @out_of_area()
-
-    if pizzabuttonapp.State.location? 
-      @navigate "wait_for_restaurants", 
-          trigger: true
-    else
-      waiting_view = new pizzabuttonapp.Views.WaitingView
-        message: "Waiting for location..."
-      waiting_view.render()
-      poll_for_location()
+      continue_when:  -> pizzabuttonapp.State.location? 
+      give_up:        => @out_of_area() 
+      message:        "Waiting for location..."
 
   wait_for_restaurants: ->
-    console.log "Waiting for restaurants now"
+    process_restaurants = =>
+      # Populated value for restaurants means we're within range... 
+      if pizzabuttonapp.State.restaurants? 
+        @navigate 'ensure_address',
+          trigger: true
+      else
+        @navigate 'no_restaurants',
+          trigger: true
+
+    new ensureAndWaitFor
+      continue:       process_restaurants
+      continue_when:  -> pizzabuttonapp.State.location? 
+      give_up:        => @out_of_area() 
+      message:        "Waiting for location..."
+
+  ensure_address: ->
+    if pizzabuttonapp.State.user? and pizzabuttonapp.State.user.get_primary_address()?
+      @navigate 'ensure_cc', 
+        trigger: true
+    else
+      @navigate 'addresses/new',
+        trigger: true
+
+  ensure_cc: -> 
+    if pizzabuttonapp.State.user? and pizzabuttonapp.State.user.get_primary_cc()?
+      @navigate 'orders/confirm', 
+        trigger: true
+    else
+      @navigate 'credit_cards/new',
+        trigger: true
 
   new_session: ->
     #
