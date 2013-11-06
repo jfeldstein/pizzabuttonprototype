@@ -15,9 +15,8 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     'orders/:id':      'show_order'
 
   new_order: ->
-    @order = new pizzabuttonapp.Models.OrderModel
     pizzapicker = new pizzabuttonapp.Views.PizzaPickerView 
-      model: @order
+      model: pizzabuttonapp.State.order
       next_step: =>
         @navigate 'wait_for_loc', 
           trigger: true
@@ -72,13 +71,18 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     console.log "NO LOCATION"
 
   new_address: =>
-    console.log("Check and get address", @order)
+    pick_or_add_address = new pizzabuttonapp.Views.PickOrAddAddressView
+      model: pizzabuttonapp.State.user
+      next_step: =>
+        @navigate 'orders/confirm',
+          trigger: true
+    pick_or_add_address.render()
 
   new_credit_card: ->
     #
 
   confirm_order: ->
-    #
+    console.log("CONFIRM ORDER", pizzabuttonapp.State.order)
 
   show_order: ->
     #

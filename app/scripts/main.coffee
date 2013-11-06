@@ -28,18 +28,26 @@ window.pizzabuttonapp =
   init: ->
     'use strict'
     routes = new pizzabuttonapp.Routers.AppRouter
-    Backbone.history.start()
+
+    # TODO: Have the user stay logged in between app-loads
+    pizzabuttonapp.State.user = new pizzabuttonapp.Models.UserModel
+
+    pizzabuttonapp.State.order = new pizzabuttonapp.Models.OrderModel
 
     getLocation (loc) =>
       @State.location = loc
       getRestaurants (restaurants) =>
         @State.restaurants = restaurants if restaurants.length > 0
 
+    Backbone.history.start()
+
 # Put phonegap location implementation here
 getLocation = (cb) ->
   #stub, just return a dummy value
   cb
     zip: 94131
+    state: 'CA'
+    city: 'San Francisco'
 
 getRestaurants = (cb) -> 
   #stub, return either one restaurant:

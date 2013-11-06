@@ -41,5 +41,8 @@ class pizzabuttonapp.Models.OrderModel extends Backbone.Model
   existing_size_for_type: (type) => 
     return @get('pizzas')[type].size 
 
+  set_delivery_address: (address) ->
+    @set 'delivery_address', address
+
 
 
