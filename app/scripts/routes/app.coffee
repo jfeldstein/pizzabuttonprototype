@@ -50,6 +50,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
 
   ensure_address: ->
     if pizzabuttonapp.State.user? and pizzabuttonapp.State.user.get_primary_address()?
+      # TODO: Are we near the address? If not, we still need a new one / user to pick.
       @navigate 'ensure_cc', 
         trigger: true
     else
@@ -70,7 +71,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
   out_of_area: ->
     console.log "NO LOCATION"
 
-  new_address: ->
+  new_address: =>
     console.log("Check and get address", @order)
 
   new_credit_card: ->
