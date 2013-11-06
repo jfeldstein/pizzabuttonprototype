@@ -10,17 +10,17 @@
       <%= pizza_types_in_order[i].type_name %>
     </dt>
     <dd class="pizza">
-      <%= pizza_types_in_order[i].subtotal %>
+      <%= money(pizza_types_in_order[i].subtotal) %>
     </dd>
   <% } %>  
 
   <!-- Other charges underneath, should be smaller/grey -->
   <dt class="other">Service Fee</dt>
-  <dd class="other"><%= service_fee %></dd>
+  <dd class="other"><%= money(service_fee) %></dd>
 
   <!-- Total at the end -->
   <dt class="total">Total</dt>
-  <dd class="total"><%= sub_total %></dd>
+  <dd class="total"><%= money(sub_total) %></dd>
 
   <!-- Plus tip -->
   <dt class="tip">Include Tip?</dt>
@@ -56,7 +56,7 @@
 
 <div class="payment-info">
   A 
-  <div class="amount"><%= grand_total %></div>
+  <div class="amount"><%= money(grand_total) %></div>
   charge to card ending in 
   <div class="cc_last_4"><%= cc_last_four %></div>
 </div>
