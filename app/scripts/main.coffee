@@ -108,8 +108,6 @@ class window.ensureAndWaitFor
         # Give up
         @give_up()
 
-    console.log "Continue when", @continue_when, @continue_when()
-
     if @continue_when()
       @continue()
     else

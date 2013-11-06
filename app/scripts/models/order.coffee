@@ -44,5 +44,8 @@ class pizzabuttonapp.Models.OrderModel extends Backbone.Model
   set_delivery_address: (address) ->
     @set 'delivery_address', address
 
+  set_billing_cc: (credit_card) ->
+    @set 'billing_cc', credit_card
+
 
 

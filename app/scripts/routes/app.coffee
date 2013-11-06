@@ -57,7 +57,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
         trigger: true
 
   ensure_cc: -> 
-    if pizzabuttonapp.State.user? and pizzabuttonapp.State.user.get_primary_cc()?
+    if pizzabuttonapp.State.user? and pizzabuttonapp.State.user.has_primary_cc()
       @navigate 'orders/confirm', 
         trigger: true
     else
@@ -74,12 +74,17 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     pick_or_add_address = new pizzabuttonapp.Views.PickOrAddAddressView
       model: pizzabuttonapp.State.user
       next_step: =>
-        @navigate 'orders/confirm',
+        @navigate 'ensure_cc',
           trigger: true
     pick_or_add_address.render()
 
   new_credit_card: ->
-    #
+    add_credit_card = new pizzabuttonapp.Views.AddCreditCardView
+      model: pizzabuttonapp.State.order
+      next_step: => 
+        @navigate 'orders/confirm',
+          trigger: true
+    add_credit_card.render()
 
   confirm_order: ->
     console.log("CONFIRM ORDER", pizzabuttonapp.State.order)
