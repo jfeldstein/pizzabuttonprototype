@@ -1,6 +1,6 @@
 'use strict';
 
-class pizzabuttonapp.Views.ConfirmOrderView extends Backbone.View
+class pizzabuttonapp.Views.ConfirmOrderView extends pizzabuttonapp.Views.BaseView
 
     template: JST['app/scripts/templates/ConfirmOrder.ejs']
 
@@ -37,11 +37,6 @@ class pizzabuttonapp.Views.ConfirmOrderView extends Backbone.View
       cc_last_four:         summary.billing_cc.last_four
       sub_total:            summary.pizza_total + pizzabuttonapp.Config.service_fee
       service_fee:          pizzabuttonapp.Config.service_fee
-
-    render: ->
-      @$el.html @template @template_data()
-      pizzabuttonapp.Views.ViewPusher.render @el
-      @delegateEvents()
 
     confirm_order: ->
       @options.next_step()

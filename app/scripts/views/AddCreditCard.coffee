@@ -1,6 +1,6 @@
 'use strict';
 
-class pizzabuttonapp.Views.AddCreditCardView extends Backbone.View
+class pizzabuttonapp.Views.AddCreditCardView extends pizzabuttonapp.Views.BaseView
 
     template: JST['app/scripts/templates/AddCreditCard.ejs']
 
@@ -11,11 +11,6 @@ class pizzabuttonapp.Views.AddCreditCardView extends Backbone.View
       @new_credit_card = new pizzabuttonapp.Models.CreditCardModel
 
       new_credit_card: @new_credit_card.toJSON()
-
-    render: ->
-      @$el.html @template @template_data()
-      pizzabuttonapp.Views.ViewPusher.render @el
-      @delegateEvents()
 
     use_new_credit_card: ->
       # Get all field values

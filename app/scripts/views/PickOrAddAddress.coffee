@@ -1,6 +1,6 @@
 'use strict';
 
-class pizzabuttonapp.Views.PickOrAddAddressView extends Backbone.View
+class pizzabuttonapp.Views.PickOrAddAddressView extends pizzabuttonapp.Views.BaseView
 
     template: JST['app/scripts/templates/PickOrAddAddress.ejs']
 
@@ -15,11 +15,6 @@ class pizzabuttonapp.Views.PickOrAddAddressView extends Backbone.View
 
       existing_addresses: pizzabuttonapp.State.user.get_addresses().toJSON()
       new_address: @new_address.toJSON()
-
-    render: ->
-      @$el.html @template @template_data()
-      pizzabuttonapp.Views.ViewPusher.render @el
-      @delegateEvents()
 
     use_new_address: ->
       street = @$('[name="new_address[street]"]').val()

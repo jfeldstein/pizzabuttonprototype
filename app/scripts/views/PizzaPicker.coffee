@@ -1,6 +1,6 @@
 'use strict';
 
-class pizzabuttonapp.Views.PizzaPickerView extends Backbone.View
+class pizzabuttonapp.Views.PizzaPickerView extends pizzabuttonapp.Views.BaseView
 
   template: JST['app/scripts/templates/PizzaPicker.ejs']
 
@@ -50,9 +50,7 @@ class pizzabuttonapp.Views.PizzaPickerView extends Backbone.View
     pizza_sizes: pizzabuttonapp.Config.pizza_sizes
 
   render: =>
-    @$el.html @template @template_data()
-    pizzabuttonapp.Views.ViewPusher.render @el
-    @delegateEvents()
+    super
     @updateUI()
 
   updateUI: =>

@@ -97,6 +97,7 @@ getRestaurants = (cb) ->
   #or none:
   #cb([])
 
+
 class window.ensureAndWaitFor
   constructor: (opts) ->
     required_opts = ['continue', 'continue_when', 'give_up']
