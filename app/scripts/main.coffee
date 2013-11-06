@@ -69,9 +69,7 @@ getLocation = (cb) ->
 
 getRestaurants = (cb) -> 
   #stub, return either one restaurant:
-  cb []
-
-  [
+  cb [
     name: "Pappa Johns"
     phone: '8472824467'
     menu:
