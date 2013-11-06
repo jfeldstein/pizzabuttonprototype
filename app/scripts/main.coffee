@@ -32,12 +32,44 @@ window.pizzabuttonapp =
 
     getLocation (loc) =>
       @State.location = loc
+      getRestaurants (restaurants) =>
+        @State.restaurants = restaurants if restaurants.length > 0
 
 # Put phonegap location implementation here
 getLocation = (cb) ->
   #stub, just return a dummy value
   cb
     zip: 94131
+
+getRestaurants = (cb) -> 
+  #stub, return either one restaurant:
+  cb [
+    name: "Pappa Johns"
+    phone: '8472824467'
+    menu:
+      cheese:
+        S: 9
+        M: 11
+        L: 13
+        XL: 16
+      pepperonni:
+        S: 10
+        M: 12
+        L: 14
+        XL: 17
+    location:
+      lat: -127.1234
+      lon: 32.4321
+      address:
+        street: "123 Pizza Lane"
+        city: "Buffalo Grove"
+        state: "IL"
+        zip: "60089"
+  ]
+  #or multiple:
+  #
+  #or none:
+  #cb([])
 
 class window.ensureAndWaitFor
   constructor: (opts) ->
