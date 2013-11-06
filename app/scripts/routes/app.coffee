@@ -44,9 +44,9 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
 
     new ensureAndWaitFor
       continue:       process_restaurants
-      continue_when:  -> pizzabuttonapp.State.location? 
+      continue_when:  -> pizzabuttonapp.State.restaurants? 
       give_up:        => @out_of_area() 
-      message:        "Waiting for location..."
+      message:        "Looking for pizza parlours..."
 
   ensure_address: ->
     if pizzabuttonapp.State.user? and pizzabuttonapp.State.user.get_primary_address()?

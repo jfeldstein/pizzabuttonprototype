@@ -39,7 +39,7 @@ getLocation = (cb) ->
   cb
     zip: 94131
 
-class ensureAndWaitFor
+class window.ensureAndWaitFor
   constructor: (opts) ->
     required_opts = ['continue', 'continue_when', 'give_up']
 
@@ -67,6 +67,8 @@ class ensureAndWaitFor
       else
         # Give up
         @give_up()
+
+    console.log "Continue when", @continue_when, @continue_when()
 
     if @continue_when()
       @continue()
