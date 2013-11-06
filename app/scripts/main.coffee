@@ -3,6 +3,7 @@ window.pizzabuttonapp =
   Collections: {}
   Views: {}
   Routers: {}
+  State: {}
   Config: 
     pizza_types: [
         type: 'cheese'
@@ -28,6 +29,15 @@ window.pizzabuttonapp =
     'use strict'
     routes = new pizzabuttonapp.Routers.AppRouter
     Backbone.history.start()
+
+    getLocation (loc) =>
+      @State.location = loc
+
+# Put phonegap location implementation here
+getLocation = (cb) ->
+  #stub, just return a dummy value
+  cb
+    zip: 94131
 
 $ ->
   'use strict'
