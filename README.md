@@ -7,7 +7,7 @@ It's a web app, built using Yoeman. Currently needs to be wrapped into iOS and A
 
 The server endpoints for finding restaurants, shipping pizzas and registering users is here: [TBD]
 
-*Start the local server* with `grunt server`. It uses LiveReload to automatically refresh the window when detecting changes to files. 
+**Start the local server** with `grunt server`. It uses LiveReload to automatically refresh the window when detecting changes to files. 
 
 Add new Backbone components using: 
 
