@@ -29,6 +29,7 @@ class pizzabuttonapp.Views.PizzaPickerView extends pizzabuttonapp.Views.BaseView
   template_data: ->
     # Rolls up individual pizzas into totals
     order_summary = @model.summary()
+    has_selected_pizza = false
 
     pizza_selection = _.map pizzabuttonapp.Config.pizza_types, (type) ->
       # Does the order already include pizzas of the given type? 
@@ -39,6 +40,9 @@ class pizzabuttonapp.Views.PizzaPickerView extends pizzabuttonapp.Views.BaseView
         size_id: pizzabuttonapp.Config.pizza_sizes[0].id
         quantity: 0
 
+      # Boolean for "has the user picked something"
+      has_selected_pizza = true if order_of_this_type.quantity > 0
+
       # Apply in-order quantities and sizes to the list of types of pizzas
       _.extend type, 
         size_id:  order_of_this_type.size_id
@@ -48,6 +52,7 @@ class pizzabuttonapp.Views.PizzaPickerView extends pizzabuttonapp.Views.BaseView
     # Return this hash:
     pizzas: pizza_selection
     pizza_sizes: pizzabuttonapp.Config.pizza_sizes
+    has_selected_pizza: has_selected_pizza
 
   render: =>
     super
