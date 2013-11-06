@@ -1,3 +1,64 @@
+<div class="page-instruction">Please confirm your order:</div>
+
+<dl class="charge-list">
+  
+  <!-- List pizzas first -->
+  <% for(var i=0; i<pizza_types_in_order.length; i++) { %>
+    <dt class="pizza">
+      <%= pizza_types_in_order[i].quantity + 'x' %>
+      <%= pizza_types_in_order[i].size_name %>
+      <%= pizza_types_in_order[i].type_name %>
+    </dt>
+    <dd class="pizza">
+      <%= pizza_types_in_order[i].subtotal %>
+    </dd>
+  <% } %>  
+
+  <!-- Other charges underneath, should be smaller/grey -->
+  <dt class="other">Service Fee</dt>
+  <dd class="other"><%= service_fee %></dd>
+
+  <!-- Total at the end -->
+  <dt class="total">Total</dt>
+  <dd class="total"><%= sub_total %></dd>
+
+  <!-- Plus tip -->
+  <dt class="tip">Include Tip?</dt>
+  <dd class="tip">
+    <div class="btn-group btn-group-xs">
+      <button type="button" class="btn btn-default <%= (selected_tip=='2') ? 'active':'' %>" data-tip-amount="2">$2</button>
+      <button type="button" class="btn btn-default <%= (selected_tip=='3') ? 'active':'' %>" data-tip-amount="3">$3</button>
+      <button type="button" class="btn btn-default <%= (selected_tip=='5') ? 'active':'' %>" data-tip-amount="5">$5</button>
+    </div>
+  </dd>
+</dl>
+
+<div class="sub-heading">Delivered from:</div>
+
+<div class="restaurant-info js-restaurant-info">
+  <div class="name">
+    <%= restaurant.name %>
+  </div>
+
+  <div class="address">
+    <%= restaurant.street_address %>
+  </div>
+
+  <div class="phone">
+    <%= restaurant.phone %> 
+  </div>
+
+  <a href="#" class="js-change-restaurant">Change Restaurant</a>
+</div>
 
 
-<% console.log("ORDER", order) %>
+<div class="sub-heading">Paid for via:</div>
+
+<div class="payment-info">
+  A 
+  <div class="amount"><%= grand_total %></div>
+  charge to card ending in 
+  <div class="cc_last_4"><%= cc_last_four %></div>
+</div>
+
+<button type="button" class="btn btn-primary btn-block js-">Request Pizza</button>

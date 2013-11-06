@@ -1,7 +1,7 @@
 <ul>
   
   <% for(var i=0; i<pizzas.length; i++) { %>
-    <li data-pizza-type="<%= pizzas[i].type %>">
+    <li data-pizza-type-id="<%= pizzas[i].id %>">
       <ul>
         <li><%= pizzas[i].friendly_name %></li>
         <li>
@@ -15,9 +15,9 @@
         </li>
         <li>
             Size: 
-            <select class="js-size">
+            <select class="js-size-id">
               <% for(var j=0; j<pizza_sizes.length; j++) { %>
-                <option value="<%= pizza_sizes[j].code %>" <%= (pizzas[i].size==pizza_sizes[j].code) ? 'SELECTED' : '' %>><%= pizza_sizes[j].friendly_name %></option>
+                <option value="<%= pizza_sizes[j].id %>" <%= (pizzas[i].size_id==pizza_sizes[j].id) ? 'SELECTED' : '' %>><%= pizza_sizes[j].friendly_name %></option>
               <% } %>
             </select>
         </li>

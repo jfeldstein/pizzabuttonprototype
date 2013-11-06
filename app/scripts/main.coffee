@@ -5,24 +5,25 @@ window.pizzabuttonapp =
   Routers: {}
   State: {}
   Config: 
+    service_fee: 1
     pizza_types: [
-        type: 'cheese'
+        id: 'cheese'
         friendly_name: 'Cheese'
       ,
-        type: 'pepperonni'
+        id: 'pepperonni'
         friendly_name: 'Pepperonni'
     ]
     pizza_sizes: [
-        code: 'S'
+        id: 'S'
         friendly_name: 'Small'
       ,
-        code: 'M'
+        id: 'M'
         friendly_name: 'Medium'
       ,
-        code: 'L'
+        id: 'L'
         friendly_name: 'Large'
       ,
-        code: 'XL'
+        id: 'XL'
         friendly_name: 'Extra-Large'
     ]
   init: ->
@@ -31,20 +32,20 @@ window.pizzabuttonapp =
 
     # TODO: Have the user stay logged in between app-loads
     pizzabuttonapp.State.user = new pizzabuttonapp.Models.UserModel
-    #  addresses: new pizzabuttonapp.Collections.AddressCollection [
-    #    street: "301 Crestmont"
-    #    city:   "San Francisco"
-    #    state:  "CA"
-    #    zip:    "94131"
-    #  ]
-    #  credit_card: new pizzabuttonapp.Models.CreditCardModel
-    #    number:     '1234123412341234'
-    #    name:       'Jordan Feldstein'
-    #    exp_month:  '08'
-    #    exp_year:   '15'
-    #    zip:        '93131'
-    #    cvv:        '123'
-    #  phone_number: '8472824467'
+      addresses: new pizzabuttonapp.Collections.AddressCollection [
+        street: "301 Crestmont"
+        city:   "San Francisco"
+        state:  "CA"
+        zip:    "94131"
+      ]
+      credit_card: new pizzabuttonapp.Models.CreditCardModel
+        number:     '1234123412341234'
+        name:       'Jordan Feldstein'
+        exp_month:  '08'
+        exp_year:   '15'
+        zip:        '93131'
+        cvv:        '123'
+      phone_number: '8472824467'
 
     pizzabuttonapp.State.order = new pizzabuttonapp.Models.OrderModel
       customer: pizzabuttonapp.State.user
@@ -52,7 +53,9 @@ window.pizzabuttonapp =
     getLocation (loc) =>
       @State.location = loc
       getRestaurants (restaurants) =>
-        @State.restaurants = restaurants if restaurants.length > 0
+        if restaurants.length > 0
+          @State.restaurants = restaurants
+          @State.order.set_restaurant restaurants[0]
 
     Backbone.history.start()
 

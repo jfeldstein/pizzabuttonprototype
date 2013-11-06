@@ -7,23 +7,23 @@ class pizzabuttonapp.Views.PizzaPickerView extends Backbone.View
   events: 
     'click .js-add-pizza':    'add_pizza'
     'click .js-remove-pizza': 'remove_pizza'
-    'change .js-size':        'resize_pizza'
+    'change .js-size-id':        'resize_pizza'
     'click .js-continue':     'finish'
 
   add_pizza: (e) => 
-    type = $(e.target).parents('[data-pizza-type]').data('pizza-type')
-    @model.add_pizza(type)
+    type_id = $(e.target).parents('[data-pizza-type-id]').data('pizza-type-id')
+    @model.add_pizza(type_id)
     @updateUI()
 
   remove_pizza: (e) => 
-    type = $(e.target).parents('[data-pizza-type]').data('pizza-type')
-    @model.remove_pizza(type)
+    type_id = $(e.target).parents('[data-pizza-type-id]').data('pizza-type-id')
+    @model.remove_pizza(type_id)
     @updateUI()
 
   resize_pizza: (e) => 
-    type = $(e.target).parents('[data-pizza-type]').data('pizza-type')
-    new_size = $(e.target).val()
-    @model.resize_pizza(type, new_size)
+    type_id = $(e.target).parents('[data-pizza-type-id]').data('pizza-type-id')
+    new_size_id = $(e.target).val()
+    @model.resize_pizza(type_id, new_size_id)
     @updateUI()
 
   template_data: ->
@@ -32,17 +32,18 @@ class pizzabuttonapp.Views.PizzaPickerView extends Backbone.View
 
     pizza_selection = _.map pizzabuttonapp.Config.pizza_types, (type) ->
       # Does the order already include pizzas of the given type? 
-      order_of_this_type = order_summary.pizzas[type]
+      order_of_this_type = order_summary.pizzas[type.id]
 
       # If not found, start with these defaults
       order_of_this_type ||= 
-        size: pizzabuttonapp.Config.pizza_sizes[0].code
+        size_id: pizzabuttonapp.Config.pizza_sizes[0].id
         quantity: 0
 
       # Apply in-order quantities and sizes to the list of types of pizzas
       _.extend type, 
-        size:     order_of_this_type.size
+        size_id:  order_of_this_type.size_id
         quantity: order_of_this_type.quantity
+        type_id: type.id
 
     # Return this hash:
     pizzas: pizza_selection
@@ -57,15 +58,15 @@ class pizzabuttonapp.Views.PizzaPickerView extends Backbone.View
   updateUI: =>
     pizzas = @model.summary().pizzas
 
-    @$('[data-pizza-type]').each (i, el) =>
+    @$('[data-pizza-type-id]').each (i, el) =>
       $el = $(el)
-      type = $el.data('pizza-type')
+      type_id = $el.data('pizza-type-id')
 
-      type_quantity = if pizzas[type]? then pizzas[type].quantity else 0
-      type_size     = if pizzas[type]? then pizzas[type].size else pizzabuttonapp.Config.pizza_sizes[0].code
+      quantity = if pizzas[type_id]? then pizzas[type_id].quantity else 0
+      size     = if pizzas[type_id]? then pizzas[type_id].size_id else pizzabuttonapp.Config.pizza_sizes[0].id
 
-      $el.find('.js-quantity').text type_quantity
-      $el.find('.js-size').val type_size
+      $el.find('.js-quantity').text quantity
+      $el.find('.js-size').val size
 
   finish: => 
     @options.next_step()
