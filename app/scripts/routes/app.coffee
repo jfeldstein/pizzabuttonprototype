@@ -13,6 +13,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     'credit_cards/new':'new_credit_card'
     'orders/confirm':  'confirm_order'
     'orders/:id':      'show_order'
+    '*path':           'new_order'
 
   new_order: ->
     pizzapicker = new pizzabuttonapp.Views.PizzaPickerView 
