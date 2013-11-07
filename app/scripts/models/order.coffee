@@ -73,5 +73,10 @@ class pizzabuttonapp.Models.OrderModel extends Backbone.Model
   set_tip: (new_tip) ->
     @set 'selected_tip', new_tip
 
+  submit: (options) ->
+    @save 
+      success: options.success
+      error: ->
+        console.log "Failure saving order", arguments
 
 

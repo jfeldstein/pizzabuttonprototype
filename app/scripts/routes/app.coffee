@@ -112,10 +112,10 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     #
 
   submit_order: ->
-    # TODO: Send the order up to the server
+    pizzabuttonapp.State.order.submit
+      success: =>
+        @navigate "orders/#{pizzabuttonapp.State.order.get('id')}",
+          trigger: true
 
-    # Then, 
-    @navigate "orders/#{pizzabuttonapp.State.order.get('id')}",
-      trigger: true
 
   
