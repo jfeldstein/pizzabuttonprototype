@@ -38,6 +38,7 @@ class pizzabuttonapp.Views.ConfirmOrderView extends pizzabuttonapp.Views.BaseVie
       service_fee:          pizzabuttonapp.Config.service_fee
 
     confirm_order: ->
+      @$('.js-confirm-order').attr('DISABLED', 'DISABLED').text('Placing Order...')
       @options.next_step()
 
     set_tip: (e) =>
