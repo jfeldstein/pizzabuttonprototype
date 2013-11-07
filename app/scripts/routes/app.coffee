@@ -46,7 +46,9 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     new ensureAndWaitFor
       continue:       process_restaurants
       continue_when:  -> pizzabuttonapp.State.restaurants? 
-      give_up:        => @out_of_area() 
+      give_up:        => 
+        @navigate 'no_restaurants',
+          trigger: true 
       message:        "Looking for pizza parlours..."
 
   ensure_address: ->
@@ -109,12 +111,23 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     confirm_order.render()
 
   show_order: ->
-    #
+    order_placed = new pizzabuttonapp.Views.OrderPlacedView
+      model: pizzabuttonapp.State.order
+      order_again: => 
+        # Reset the order 
+        pizzabuttonapp.State.order = new pizzabuttonapp.Models.OrderModel
+          customer: pizzabuttonapp.State.user
+
+        # Go back to the menu
+        @navigate 'orders/new',
+          trigger: true
+          
+    order_placed.render()
 
   submit_order: ->
     pizzabuttonapp.State.order.submit
       success: =>
-        @navigate "orders/#{pizzabuttonapp.State.order.get('id')}",
+        @navigate "orders/#{pizzabuttonapp.State.order.id}",
           trigger: true
 
 

@@ -16,6 +16,14 @@
         <!-- build:js scripts/vendor/modernizr.js -->
         <script src="bower_components/modernizr/modernizr.js"></script>
         <!-- endbuild -->
+
+        <!-- Parse.com SDK -->
+        <script src="http://www.parsecdn.com/js/parse-1.2.12.min.js"></script>
+        <script type="text/javascript">
+        Parse.initialize(
+            "ld4waOJIGKGOymyyLArtwVSHKnxT87h9hzsIlYhP", 
+            "FlteyJvkJpZJrsOoTnB8acXgTn6mqrXDwvBaMbeB");
+        </script>
     </head>
     <body>
 
@@ -65,6 +73,7 @@
         <script src="scripts/views/AddCreditCard.js"></script>
         <script src="scripts/views/ConfirmOrder.js"></script>
         <script src="scripts/views/OutOfArea.js"></script>
+        <script src="scripts/views/OrderPlaced.js"></script>
         <!-- endbuild -->
 </body>
 </html>

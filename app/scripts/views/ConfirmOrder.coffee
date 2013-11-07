@@ -30,7 +30,6 @@ class pizzabuttonapp.Views.ConfirmOrderView extends pizzabuttonapp.Views.BaseVie
             subtotal: qty * unit_price
 
       pizza_types_in_order: pizza_types_in_order
-      order:                @model.toJSON()
       restaurant:           summary.restaurant
       selected_tip:         summary.selected_tip
       grand_total:          summary.grand_total

@@ -14,7 +14,7 @@ class pizzabuttonapp.Views.AddCreditCardView extends pizzabuttonapp.Views.BaseVi
 
     use_new_credit_card: ->
       # Get all field values
-      fields = ['number', 'name', 'exp_month', 'exp_year', 'zip']
+      fields = ['number', 'name', 'exp_month', 'exp_year', 'zip', 'cvv']
       values = {}
 
       _.each fields, (field) =>

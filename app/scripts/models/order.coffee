@@ -1,6 +1,9 @@
 'use strict';
 
-class pizzabuttonapp.Models.OrderModel extends Backbone.Model
+class pizzabuttonapp.Models.OrderModel extends Parse.Object
+
+  className: 'Order'
+
   defaults: 
     pizzas: {}
     selected_tip: 0

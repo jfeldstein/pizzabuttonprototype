@@ -31,21 +31,8 @@ window.pizzabuttonapp =
     routes = new pizzabuttonapp.Routers.AppRouter
 
     # TODO: Have the user stay logged in between app-loads
-    pizzabuttonapp.State.user = new pizzabuttonapp.Models.UserModel
-      addresses: new pizzabuttonapp.Collections.AddressCollection [
-        street: "301 Crestmont"
-        city:   "San Francisco"
-        state:  "CA"
-        zip:    "94131"
-      ]
-      credit_card: new pizzabuttonapp.Models.CreditCardModel
-        number:     '1234123412341234'
-        name:       'Jordan Feldstein'
-        exp_month:  '08'
-        exp_year:   '15'
-        zip:        '93131'
-        cvv:        '123'
-      phone_number: '8472824467'
+    pizzabuttonapp.State.user = Parse.User.current() || buildNewUser()
+    pizzabuttonapp.State.user.fetch_related()
 
     pizzabuttonapp.State.order = new pizzabuttonapp.Models.OrderModel
       customer: pizzabuttonapp.State.user
@@ -63,9 +50,30 @@ window.pizzabuttonapp =
 getLocation = (cb) ->
   #stub, just return a dummy value
   cb
-    zip: 94131
+    zip: '94131'
     state: 'CA'
     city: 'San Francisco'
+
+buildNewUser = ->
+  user = new Parse.User
+    username: randomString 40
+    password: randomString 40
+
+  # TODO: Figure out some way to handle errors when creating these anonymous users.
+  user.signUp()
+
+  user
+
+window.randomString = (len, charSet) ->
+    charSet ||= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    randomString = ''
+    i=0
+    while i < len
+      randomPoz = Math.floor(Math.random() * charSet.length)
+      randomString += charSet.substring(randomPoz,randomPoz+1)
+      i++
+
+    randomString
 
 getRestaurants = (cb) -> 
   #stub, return either one restaurant:
