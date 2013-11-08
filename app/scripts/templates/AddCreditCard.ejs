@@ -1,10 +1,15 @@
+<% if(error) { %>
+  <div class="error">
+    <%= error %>
+  </div>
+<% } %>
+
+
 <div class="js-new-credit-card new-credit-card">
   <input name="new_credit_card[number]" placeholder="Card Number" /> <br />
-  <input name="new_credit_card[name]" placeholder="Card Holder Name" /> <br />
   <input name="new_credit_card[exp_month]" placeholder="Month (MM)" /> 
   <input name="new_credit_card[exp_year]" placeholder="Year (YY)" /> <br />
-  <input name="new_credit_card[zip]" placeholder="Billing Zip Code" /> <br />
-  <input name="new_credit_card[cvv]" placeholder="Security / CVV Code" /> <br />
-  <button class="js-use-new-credit-card">Use New Credit Card</button>
+  <input name="new_credit_card[cvc]" placeholder="Security / CVC Code" /> <br />
+  <button class="js-save-card">Use New Credit Card</button>
 </div>
 

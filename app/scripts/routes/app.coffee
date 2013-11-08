@@ -124,6 +124,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
         # Reset the order 
         pizzabuttonapp.State.order = new pizzabuttonapp.Models.OrderModel
           customer: pizzabuttonapp.State.user
+          restaurant: pizzabuttonapp.State.restaurants[0]
 
         # Go back to the menu
         @navigate 'orders/new',

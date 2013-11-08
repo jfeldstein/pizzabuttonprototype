@@ -6,6 +6,7 @@ _.extend Parse.User.prototype,
 
   fetch_related: -> 
     @get_addresses().fetch()
+    @get_primary_cc().fetch()
     @get_orders().fetch 
       success: =>
         @trigger 'change:orders'
@@ -18,6 +19,10 @@ _.extend Parse.User.prototype,
     @get_addresses().at 0
 
   get_addresses: ->
+    # Can't fetch addresses from Parse if user is not yet saved
+    if !@id?
+      return new pizzabuttonapp.Collections.AddressCollection
+
     if !@addresses?
       address_query = new Parse.Query(pizzabuttonapp.Models.AddressModel)
       address_query.equalTo('user', @)
@@ -34,6 +39,10 @@ _.extend Parse.User.prototype,
     @get_addresses().add new_address
 
   get_orders: ->
+    # Can't fetch orders from Parse if user is not yet saved
+    if !@id?
+      return new pizzabuttonapp.Collections.OrderCollection
+
     if !@orders?
       order_query = new Parse.Query(pizzabuttonapp.Models.OrderModel)
       order_query.equalTo('customer', @)
