@@ -21,6 +21,12 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
       next_step: =>
         @navigate 'wait_for_loc', 
           trigger: true
+      return_to_order: => 
+        in_progress_order = pizzabuttonapp.State.user.get_in_progress_order()
+        pizzabuttonapp.State.order = in_progress_order
+        id = in_progress_order.id
+        @navigate "orders/#{id}",
+          trigger: true
     pizzapicker.render()
 
   wait_for_location: -> 
@@ -111,7 +117,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
         @submit_order()
     confirm_order.render()
 
-  show_order: ->
+  show_order: (id) ->
     order_placed = new pizzabuttonapp.Views.OrderPlacedView
       model: pizzabuttonapp.State.order
       order_again: => 

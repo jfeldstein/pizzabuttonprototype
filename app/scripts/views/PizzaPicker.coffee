@@ -4,11 +4,15 @@ class pizzabuttonapp.Views.PizzaPickerView extends pizzabuttonapp.Views.BaseView
 
   template: JST['app/scripts/templates/PizzaPicker.ejs']
 
+  initialize: ->
+    @listenTo @model.get('customer'), 'change:orders', @render
+
   events: 
-    'click .js-add-pizza':    'add_pizza'
-    'click .js-remove-pizza': 'remove_pizza'
-    'change .js-size-id':        'resize_pizza'
-    'click .js-continue':     'finish'
+    'click .js-add-pizza':        'add_pizza'
+    'click .js-remove-pizza':     'remove_pizza'
+    'change .js-size-id':         'resize_pizza'
+    'click .js-continue':         'finish'
+    'click .js-return-to-order':  'return_to_order'
 
   add_pizza: (e) => 
     type_id = $(e.target).parents('[data-pizza-type-id]').data('pizza-type-id')
@@ -49,10 +53,19 @@ class pizzabuttonapp.Views.PizzaPickerView extends pizzabuttonapp.Views.BaseView
         quantity: order_of_this_type.quantity
         type_id: type.id
 
+    # Is there a recent order? (Give the view null, or a hash)
+    in_progress_order = @model.get('customer').get_in_progress_order()
+    if in_progress_order?
+      in_progress_order = in_progress_order.toJSON()
+
     # Return this hash:
+    in_progress_order: in_progress_order
     pizzas: pizza_selection
     pizza_sizes: pizzabuttonapp.Config.pizza_sizes
     has_selected_pizza: has_selected_pizza
+
+  return_to_order: ->
+    @options.return_to_order()
 
   finish: => 
     @options.next_step()

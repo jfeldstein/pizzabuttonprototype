@@ -6,6 +6,9 @@ _.extend Parse.User.prototype,
 
   fetch_related: -> 
     @get_addresses().fetch()
+    @get_orders().fetch 
+      success: =>
+        @trigger 'change:orders'
 
   has_primary_address: ->
     @get_addresses().length >= 1
@@ -22,7 +25,6 @@ _.extend Parse.User.prototype,
 
     @addresses
     
-
   add_address: (new_address) ->
     # Persist the relation
     new_address.save
@@ -30,6 +32,23 @@ _.extend Parse.User.prototype,
 
     # Make accessible locally
     @get_addresses().add new_address
+
+  get_orders: ->
+    if !@orders?
+      order_query = new Parse.Query(pizzabuttonapp.Models.OrderModel)
+      order_query.equalTo('customer', @)
+      @orders = order_query.collection()
+
+    @orders
+
+  get_in_progress_order: ->
+    most_recent_order = @get_orders().at(0)
+
+    return null unless most_recent_order?
+
+    minutes_ago = ((new Date()) - most_recent_order.createdAt) / 60000
+
+    if minutes_ago < 90 then most_recent_order else null
 
   has_primary_cc: ->
     @has('credit_card')

@@ -17,7 +17,7 @@ class pizzabuttonapp.Views.BaseView extends Backbone.View
             precision: if amount % 1 != 0 then 2 else 0
 
 
-    render: ->
+    render: =>
       @$el.html @template @_template_data()
       pizzabuttonapp.Views.ViewPusher.render @el
       @delegateEvents()
