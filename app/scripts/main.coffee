@@ -123,8 +123,11 @@ window.randomString = (len, charSet) ->
     randomString
 
 getRestaurants = (cb) -> 
+  location = pizzabuttonapp.State.location.geo_point
+  radius   = pizzabuttonapp.Config.delivery_radius
+
   query = new Parse.Query(pizzabuttonapp.Models.RestaurantModel)
-  query.withinMiles 'coordinates', pizzabuttonapp.State.location.geo_point, pizzabuttonapp.Config.delivery_radius
+  query.withinMiles 'coordinates', location, radius
   restaurants = query.collection()
   restaurants.fetch
     success: cb
