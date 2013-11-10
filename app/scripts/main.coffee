@@ -5,6 +5,7 @@ window.pizzabuttonapp =
   Routers: {}
   State: {}
   Config: 
+    delivery_radius: 2
     service_fee: 1
     pizza_types: [
         id: 'cheese'
@@ -123,6 +124,7 @@ window.randomString = (len, charSet) ->
 
 getRestaurants = (cb) -> 
   query = new Parse.Query(pizzabuttonapp.Models.RestaurantModel)
+  query.withinMiles 'coordinates', pizzabuttonapp.State.location.geo_point, pizzabuttonapp.Config.delivery_radius
   restaurants = query.collection()
   restaurants.fetch
     success: cb
