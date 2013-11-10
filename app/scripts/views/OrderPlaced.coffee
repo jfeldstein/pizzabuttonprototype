@@ -8,7 +8,7 @@ class pizzabuttonapp.Views.OrderPlacedView extends pizzabuttonapp.Views.BaseView
       'click .js-new-order': 'new_order'
 
     template_data: ->
-      restaurant: @model.get('restaurant')
+      @model.summary()
 
     new_order: => 
       @options.order_again()

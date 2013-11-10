@@ -19,7 +19,7 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
 
   summary: ->
     pizzas:       @get('pizzas')
-    restaurant:   @get('restaurant')
+    restaurant:   @get('restaurant').toJSON()   if @has('restaurant')
     selected_tip: @get('selected_tip')
     pizza_total:  @get_pizza_total()            if @has('restaurant')
     billing_cc:   @get_billing_cc().toJSON()    if @has('billing_cc')
@@ -29,12 +29,13 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
     @get_pizza_total() + @get('selected_tip') + pizzabuttonapp.Config.service_fee
 
   get_pizza_total: -> 
-    cost_of_pizzas = 0
-    _.each @get('pizzas'), (order_details, type) =>
-      unit_price = @get('restaurant').menu[type][order_details.size_id]
-      cost_of_pizzas += unit_price * order_details.quantity
+    add_cost_of_pizza = (memo, picked, pizza_id) =>
+      memo + @get_restaurant().get_cost_of_pizzas 
+        pizza_id: pizza_id
+        size_id:  picked.size_id
+        quantity: picked.quantity
 
-    cost_of_pizzas
+    _.reduce @get_pizzas(), add_cost_of_pizza, 0
 
   add_pizza: (type_id) ->
     pizzas = @get('pizzas')
@@ -76,7 +77,25 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
   set_tip: (new_tip) ->
     @set 'selected_tip', new_tip
 
+  get_restaurant: ->
+    @get('restaurant')
+
+  get_pizzas: ->
+    @get('pizzas')
+
+  get_service_fee: ->
+    pizzabuttonapp.Config.service_fee
+
+  get_tip: ->
+    @get('tip')
+
+  get_total_charge: ->
+    @get_pizza_total() + @get_service_fee() + @get_tip()
+
   submit: (options) ->
+    @set
+      total_charge: @get_total_charge()
+
     @save 
       success: options.success
       error: ->

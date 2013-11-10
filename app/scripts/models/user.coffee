@@ -63,7 +63,7 @@ _.extend Parse.User.prototype,
     @has('credit_card')
 
   get_primary_cc: ->
-    @get('credit_card')
+    @get('credit_card') || new pizzabuttonapp.Models.CreditCardModel
 
   set_primary_cc: (new_card) ->
     # Persist the relation and foreign object

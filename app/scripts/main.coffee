@@ -42,9 +42,36 @@ window.pizzabuttonapp =
       getRestaurants (restaurants) =>
         if restaurants.length > 0
           @State.restaurants = restaurants
-          @State.order.set_restaurant restaurants[0]
+          @State.order.set_restaurant restaurants.at 0
 
     Backbone.history.start()
+
+window.seedRestaurants = ->
+  rest = new pizzabuttonapp.Models.RestaurantModel
+    menu:
+      cheese:
+        S: 7
+        M: 11
+        L: 13
+        XL: 18
+      pepperonni:
+        S: 7
+        M: 11
+        L: 13
+        XL: 18
+    name: "Pasquale's Pizzeria"
+    phone: "(415) 661-2140"
+    address:
+      street: '700 Irving St'
+      city:   'San Francisco'
+      state:  'CA'
+      zip:    '94122'
+
+  coordinates = new Parse.GeoPoint 37.7642064, -122.4654489
+
+  rest.set 'coordinates', coordinates
+
+  rest.save()
 
 # Put phonegap location implementation here
 getLocation = (cb) ->
@@ -86,34 +113,10 @@ window.randomString = (len, charSet) ->
     randomString
 
 getRestaurants = (cb) -> 
-  #stub, return either one restaurant:
-  cb [
-    name: "Pappa Johns"
-    phone: '8472824467'
-    menu:
-      cheese:
-        S: 9
-        M: 11
-        L: 13
-        XL: 16
-      pepperonni:
-        S: 10
-        M: 12
-        L: 14
-        XL: 17
-    location:
-      lat: -127.1234
-      lon: 32.4321
-      address:
-        street: "123 Pizza Lane"
-        city: "Buffalo Grove"
-        state: "IL"
-        zip: "60089"
-  ]
-  #or multiple:
-  #
-  #or none:
-  #cb([])
+  query = new Parse.Query(pizzabuttonapp.Models.RestaurantModel)
+  restaurants = query.collection()
+  restaurants.fetch
+    success: cb
 
 
 class window.ensureAndWaitFor
