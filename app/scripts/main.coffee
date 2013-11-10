@@ -75,11 +75,20 @@ window.seedRestaurants = ->
 
 # Put phonegap location implementation here
 getLocation = (cb) ->
-  #stub, just return a dummy value
-  cb
-    zip: '94131'
-    state: 'CA'
-    city: 'San Francisco'
+  # TODO: Call to phone gap will give us lat/lon
+  lat = 37.7642064
+  lon = -122.4654489
+
+  lm = new LocationManager
+  lm.reverseGeoCode lat, lon, (err, result) ->
+    # TODO: Better support for geo errors...
+    throw err if err? 
+
+    cb
+      zip:    result.zip
+      state:  result.state
+      city:   result.city
+      geo_point: new Parse.GeoPoint lat, lon
 
 getUserForAppState = -> 
   # Fetch related compenents to get started with user. 
@@ -155,6 +164,30 @@ class window.ensureAndWaitFor
         message: @message
       waiting_view.render()
       poll()
+
+class window.LocationManager
+  geoCode: (address, cb) ->
+    add_str = "#{address.street},%20#{address.city},%20#{address.state}%20#{address.zip}"
+    url = "http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=#{add_str}"
+    $.get(url).done (data) ->
+      result = data.results[0]
+      return cb "No Results" if !result?
+
+      cb null,
+        lat: result.geometry.location.lat
+        lon: result.geometry.location.lng
+        address: address
+
+  reverseGeoCode: (lat, lon, cb) ->
+    url = "http://ws.geonames.org/findNearbyPostalCodesJSON?lat=#{lat}&lng=#{lon}"
+    $.get(url).done (data) ->
+      result = data.postalCodes[0]
+      return cb "No Results" if !result?
+
+      cb null, 
+        zip:    result.postalCode
+        city:   result.adminName2
+        state:  result.adminCode1
 
 $ ->
   'use strict'

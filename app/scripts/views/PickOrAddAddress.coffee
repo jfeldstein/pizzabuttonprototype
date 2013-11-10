@@ -22,8 +22,15 @@ class pizzabuttonapp.Views.PickOrAddAddressView extends pizzabuttonapp.Views.Bas
       return @show_street_error() if street == ''
 
       @new_address.set 'street', street
-      
-      pizzabuttonapp.State.user.add_address @new_address
-      pizzabuttonapp.State.order.set_delivery_address @new_address
 
-      @options.next_step()
+      lm = new LocationManager
+      lm.geoCode @new_address.toJSON(), (err, result) =>
+        throw err if err?
+
+        geo_point = new Parse.GeoPoint result.lat, result.lon
+        @new_address.set 'geo_point', geo_point
+      
+        pizzabuttonapp.State.user.add_address @new_address
+        pizzabuttonapp.State.order.set_delivery_address @new_address
+
+        @options.next_step()
