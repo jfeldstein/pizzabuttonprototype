@@ -51,13 +51,6 @@ class pizzabuttonapp.Views.ConfirmOrderView extends pizzabuttonapp.Views.BaseVie
       # Update view
       @render()
 
-
     select_new_restaunt: ->
-      # TODO: Let the user change the restaurant to deliver this order
-      # Show picker for new restaurant
-
-    update_restaurant: ->
-      # TODO: Implement updating the restaurant selection
-      # Update model
-      # Slide new restaurant into view
+      @options.change_restaurant()
 

@@ -12,6 +12,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     'ensure_cc':       'ensure_cc'
     'credit_cards/new':'new_credit_card'
     'orders/confirm':  'confirm_order'
+    'orders/change_restaurant': 'change_restaurant'
     'orders/:id':      'show_order'
     '*path':           'new_order'
 
@@ -94,6 +95,14 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     out_of_area = new pizzabuttonapp.Views.OutOfAreaView
     out_of_area.render()
 
+  change_restaurant: =>
+    change_restaurant = new pizzabuttonapp.Views.ChangeRestaurantView
+      model: pizzabuttonapp.State.order
+      return_to_order: =>
+        @navigate 'orders/confirm',
+          trigger: true
+    change_restaurant.render()
+
   new_address: =>
     pick_or_add_address = new pizzabuttonapp.Views.PickOrAddAddressView
       model: pizzabuttonapp.State.user
@@ -115,6 +124,9 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
       model: pizzabuttonapp.State.order
       next_step: =>
         @submit_order()
+      change_restaurant: =>
+        @navigate 'orders/change_restaurant',
+          trigger: true
     confirm_order.render()
 
   show_order: (id) ->

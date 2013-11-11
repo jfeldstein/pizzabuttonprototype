@@ -48,7 +48,9 @@ window.pizzabuttonapp =
     Backbone.history.start()
 
 window.seedRestaurants = ->
-  rest = new pizzabuttonapp.Models.RestaurantModel
+  lm = new LocationManager
+
+  pasquales = new pizzabuttonapp.Models.RestaurantModel
     menu:
       cheese:
         S: 7
@@ -68,11 +70,40 @@ window.seedRestaurants = ->
       state:  'CA'
       zip:    '94122'
 
-  coordinates = new Parse.GeoPoint 37.7642064, -122.4654489
+  lm.geoCode pasquales.get('address'), (e, result) ->
+    coordinates = new Parse.GeoPoint result.lat, result.lon
 
-  rest.set 'coordinates', coordinates
+    pasquales.set 'coordinates', coordinates
 
-  rest.save()
+    pasquales.save()
+
+
+  escape = new pizzabuttonapp.Models.RestaurantModel
+    menu:
+      cheese:
+        S: 8
+        M: 12
+        L: 14
+        XL: 19
+      pepperonni:
+        S: 8
+        M: 12
+        L: 14
+        XL: 19
+    name: "Escape From New York!"
+    phone: "(415) 668-5577"
+    address:
+      street: '1737 Haight St'
+      city:   'San Francisco'
+      state:  'CA'
+      zip:    '94117'
+
+  lm.geoCode escape.get('address'), (e, result) ->
+    coordinates = new Parse.GeoPoint result.lat, result.lon
+
+    escape.set 'coordinates', coordinates
+
+    escape.save()
 
 # Put phonegap location implementation here
 getLocation = (cb) ->

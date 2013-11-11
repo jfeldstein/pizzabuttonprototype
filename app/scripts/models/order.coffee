@@ -28,9 +28,9 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
   get_grand_total: ->
     @get_pizza_total() + @get('selected_tip') + pizzabuttonapp.Config.service_fee
 
-  get_pizza_total: -> 
+  get_pizza_total: (restaurant = @get_restaurant()) -> 
     add_cost_of_pizza = (memo, picked, pizza_id) =>
-      memo + @get_restaurant().get_cost_of_pizzas 
+      memo + restaurant.get_cost_of_pizzas 
         pizza_id: pizza_id
         size_id:  picked.size_id
         quantity: picked.quantity
