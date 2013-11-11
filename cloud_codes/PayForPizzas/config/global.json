@@ -1,0 +1,11 @@
+{
+    "applications": {
+        "ThePizzaButton": {
+            "applicationId": "ld4waOJIGKGOymyyLArtwVSHKnxT87h9hzsIlYhP", 
+            "masterKey": "jrnCzHzjiP0fXE4t78YYgyq1XIiAT3Op9H8Mk9pr"
+        }, 
+        "_default": {
+            "link": "ThePizzaButton"
+        }
+    }
+}
