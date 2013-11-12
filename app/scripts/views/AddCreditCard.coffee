@@ -14,6 +14,13 @@ class pizzabuttonapp.Views.AddCreditCardView extends pizzabuttonapp.Views.BaseVi
       new_credit_card:  @new_credit_card.toJSON()
       error:            @error if @error?
 
+    render: ->
+      super
+
+      # Add cc field superpowers
+      @$('[name="new_credit_card[number]"]').payment('formatCardNumber')
+      @$('[name="new_credit_card[cvc]"]').payment('formatCardCVC')
+
     save_card: ->
       @$('.js-save-card').attr('DISABLED', 'DISABLED').text("Saving Your Card...")
 
