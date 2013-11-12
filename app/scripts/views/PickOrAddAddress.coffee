@@ -18,10 +18,13 @@ class pizzabuttonapp.Views.PickOrAddAddressView extends pizzabuttonapp.Views.Bas
 
     use_new_address: ->
       street = @$('[name="new_address[street]"]').val()
+      zip = @$('[name="new_address[zip]"]').val()
 
-      return @show_street_error() if street == ''
+      return @show_street_error() if street=='' or zip==''
 
-      @new_address.set 'street', street
+      @new_address.set 
+        street: street
+        zip: zip
 
       lm = new LocationManager
       lm.geoCode @new_address.toJSON(), (err, result) =>
