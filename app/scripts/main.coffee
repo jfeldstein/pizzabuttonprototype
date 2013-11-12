@@ -29,6 +29,8 @@ window.pizzabuttonapp =
     ]
   init: ->
     'use strict'
+
+    FastClick.attach(document.body)
     
     routes = new pizzabuttonapp.Routers.AppRouter
 
