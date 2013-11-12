@@ -214,16 +214,35 @@ class window.LocationManager
         lon: result.geometry.location.lng
         address: address
 
-  reverseGeoCode: (lat, lon, cb) ->
-    url = "http://ws.geonames.org/findNearbyPostalCodesJSON?lat=#{lat}&lng=#{lon}"
-    $.get(url).done (data) ->
-      result = data.postalCodes[0]
-      return cb "No Results" if !result?
+  reverseGeoCode: (lat, lng, cb) ->
+    geocoder = new google.maps.Geocoder
+    latLng = new google.maps.LatLng 1*lat, 1*lng
 
-      cb null, 
-        zip:    result.postalCode
-        city:   result.adminName2
-        state:  result.adminCode1
+    geocoder.geocode
+      latLng: latLng
+      , (results, status) ->
+        if status == google.maps.GeocoderStatus.OK
+          result = results[0]
+
+          # TODO: Handle no results
+
+          findComponent = (key, returnname='long_name') ->
+            winner = _.find result.address_components, (component) ->
+              component.types.indexOf(key) != -1
+            if winner? then winner[returnname] else null
+
+          zip = findComponent 'postal_code'
+          city = findComponent('sublocality') || findComponent('locality')
+          state = findComponent 'administrative_area_level_1', 'short_name'
+
+          cb null, 
+            zip:    zip
+            city:   city
+            state:  state
+        else
+          # Return blank data, log error
+
+      
 
 $ ->
   'use strict'
