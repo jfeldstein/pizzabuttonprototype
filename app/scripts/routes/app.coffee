@@ -6,7 +6,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     'sessions/new':    'new_session'
     'wait_for_loc':    'wait_for_location'
     'wait_for_restaurants': 'wait_for_restaurants'
-    'no_restaurants':  'out_of_area'
+    'not_available':   'not_available'
     'ensure_address':  'ensure_address'
     'addresses/new':   'new_address'
     'ensure_cc':       'ensure_cc'
@@ -37,7 +37,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
           trigger: true
       continue_when:  -> pizzabuttonapp.State.location? 
       give_up:        => 
-        @navigate 'no_restaurants',
+        @navigate 'not_available',
           trigger: true 
       message:        "Waiting for location..."
 
@@ -48,14 +48,14 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
         @navigate 'ensure_address',
           trigger: true
       else
-        @navigate 'no_restaurants',
+        @navigate 'not_available',
           trigger: true
 
     new ensureAndWaitFor
       continue:       process_restaurants
       continue_when:  -> pizzabuttonapp.State.restaurants? 
       give_up:        => 
-        @navigate 'no_restaurants',
+        @navigate 'not_available',
           trigger: true 
       message:        "Looking for pizza parlours..."
 
@@ -91,9 +91,9 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
   new_session: ->
     #
 
-  out_of_area: ->
-    out_of_area = new pizzabuttonapp.Views.OutOfAreaView
-    out_of_area.render()
+  not_available: ->
+    not_available = new pizzabuttonapp.Views.NotAvailableView
+    not_available.render()
 
   change_restaurant: =>
     change_restaurant = new pizzabuttonapp.Views.ChangeRestaurantView
