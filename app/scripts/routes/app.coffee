@@ -3,6 +3,7 @@
 class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
   routes:
     'orders/new':      'new_order'
+    'wait_for_panic':  'wait_for_panic'
     'sessions/new':    'new_session'
     'wait_for_loc':    'wait_for_location'
     'wait_for_restaurants': 'wait_for_restaurants'
@@ -20,7 +21,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     pizzapicker = new pizzabuttonapp.Views.PizzaPickerView 
       model: pizzabuttonapp.State.order
       next_step: =>
-        @navigate 'wait_for_loc', 
+        @navigate 'wait_for_panic', 
           trigger: true
       return_to_order: => 
         in_progress_order = pizzabuttonapp.State.user.get_in_progress_order()
@@ -30,16 +31,33 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
           trigger: true
     pizzapicker.render()
 
+  wait_for_panic: ->
+    new ensureAndWaitFor
+      continue: => 
+        if pizzabuttonapp.State.panic
+          @navigate 'not_available',
+            trigger: true
+        else 
+          @navigate 'wait_for_loc', 
+            trigger: true
+      continue_when: -> 
+        pizzabuttonapp.State.panic?
+      give_up: => 
+        @navigate 'not_available',
+          trigger: true 
+      message: "Checking for availability..."
+
   wait_for_location: -> 
     new ensureAndWaitFor
       continue: =>
         @navigate "wait_for_restaurants", 
           trigger: true
-      continue_when:  -> pizzabuttonapp.State.location? 
-      give_up:        => 
+      continue_when: -> 
+        pizzabuttonapp.State.location? 
+      give_up: => 
         @navigate 'not_available',
           trigger: true 
-      message:        "Waiting for location..."
+      message: "Waiting for location..."
 
   wait_for_restaurants: ->
     process_restaurants = =>

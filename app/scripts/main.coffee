@@ -47,6 +47,9 @@ window.pizzabuttonapp =
           @State.restaurants = restaurants
           @State.order.set_restaurant restaurants.at 0
 
+    getConfig 'panic_button_enabled', (error, panic) ->
+      pizzabuttonapp.State.panic = (panic=='true' or !!error)
+
     Backbone.history.start()
 
 window.seedRestaurants = ->
@@ -107,6 +110,26 @@ window.seedRestaurants = ->
 
     escape.save()
 
+window.getConfig = (config_name, cb) ->
+  configError = (object, error) ->
+    console.error("COULDN'T RETRIEVE CONFIG VAR: "+config_name, error)
+    cb error.code
+
+  query = new Parse.Query(pizzabuttonapp.Models.ConfigModel)
+  query.equalTo 'name', config_name
+  query.find 
+    success: (result) ->
+      config = result[0]
+
+      if config?
+        cb null, config.get('value')
+      else
+        cb 
+          code: "Config with that name not found."
+
+    error: configError
+
+  
 # Put phonegap location implementation here
 getLocation = (cb) ->
   # TODO: Call to phone gap will give us lat/lon
