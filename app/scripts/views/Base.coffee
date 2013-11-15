@@ -17,6 +17,7 @@ class pizzabuttonapp.Views.BaseView extends Backbone.View
             precision: if amount % 1 != 0 then 2 else 0
 
         phone: (string) ->
+          return '' if !string?
           string
             .replace( /[^\d]/g, '' )
             .replace( /^1/, '' )

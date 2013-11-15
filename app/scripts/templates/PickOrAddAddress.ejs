@@ -1,27 +1,20 @@
-<div class="phone">
-  <p class="error js-phone-erorr" style="display: none;">Please enter a valid phone number.</p>
-  <p>Call this phone number when pizza arrives:</p>
-  <input name="phone" value="<%= phone %>" placeholder="Phone Number..." />
-</div>
-
 <ul class="existing-addresses">
   <% for(var i=0; i<existing_addresses.length; i++) { %>
     <li class="address js-use-existing-address" data-address-id="<%= existing_addresses[i].objectId %>">
-      <%= existing_addresses[i].street %>
+      <%= existing_addresses[i].street %> <br />
+      <%= phone( existing_addresses[i].phone_number) %>
     </li>
   <% } %>
 </ul>
 
 <div class="js-new-address new-address">
-  <p class="error js-address-error" style="display: none;">
-    Please enter a street address and zip code.
-  </p>
-
   <input name="new_address[street]" placeholder="Street address..." /> <br />
   <small>
     <%= new_address.city %>, <%= new_address.state %> 
     <input type="numbers" name="new_address[zip]" value="<%= new_address.zip %>" />
   </small> <br />
-  <button class="js-use-new-address">Use New Address</button>
+  <input name="new_address[phone_number]" value="<%= phone(new_address.phone_number) %>" placeholder="Phone Number..." /> <br />
+
+  <button class="js-use-new-address" DISABLED='DISABLED'>Use New Address</button>
 </div>
 

@@ -43,7 +43,7 @@ _.extend Parse.User.prototype,
     @get 'phone_number'
 
   set_phone_number: (val) ->
-    @set 'phone_number', val.replace(/[^0-9]/g, '').replace(/^1/, '')
+    @set 'phone_number', clean_phone(val)
 
   get_orders: ->
     # Can't fetch orders from Parse if user is not yet saved

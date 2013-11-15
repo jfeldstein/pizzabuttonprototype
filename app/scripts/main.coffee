@@ -167,6 +167,9 @@ getUserForAppState = ->
   current_user
 
 
+window.clean_phone = (val) ->
+  val.replace(/[^0-9]/g, '').replace(/^1/, '')
+
 window.randomString = (len, charSet) ->
     charSet ||= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     randomString = ''

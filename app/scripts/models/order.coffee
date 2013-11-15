@@ -68,7 +68,14 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
   #  return @get('pizzas')[type_id].size_id
 
   set_delivery_address: (address) ->
+    @set_phone_number address.get_phone_number()
     @set 'delivery_address', address
+      
+  set_phone_number: (number) ->
+    @set 'phone_number', clean_phone(number)
+
+  get_phone_number: ->
+    @get 'phone_number'
 
   get_delivery_address: ->
     @get 'delivery_address'
