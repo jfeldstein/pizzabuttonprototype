@@ -16,6 +16,12 @@ class pizzabuttonapp.Views.BaseView extends Backbone.View
           accounting.formatMoney amount, 
             precision: if amount % 1 != 0 then 2 else 0
 
+        phone: (string) ->
+          string
+            .replace( /[^\d]/g, '' )
+            .replace( /^1/, '' )
+            .replace( /(\d{3})(\d{3})(\d{4})/, '($1) $2-$3' )
+
 
     render: =>
       @$el.html @template @_template_data()

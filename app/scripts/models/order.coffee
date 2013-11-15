@@ -24,6 +24,11 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
     pizza_total:  @get_pizza_total()            if @has('restaurant')
     billing_cc:   @get_billing_cc().toJSON()    if @has('billing_cc')
     grand_total:  @get_grand_total()            if @has('restaurant')
+    delivery_address: @get_delivery_address().toJSON() if @has('delivery_address')
+    customer:     @get_customer().toJSON()      if @has('customer')
+
+  get_customer: ->
+    @get('customer')
 
   get_grand_total: ->
     @get_pizza_total() + @get('selected_tip') + pizzabuttonapp.Config.service_fee
@@ -64,6 +69,9 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
 
   set_delivery_address: (address) ->
     @set 'delivery_address', address
+
+  get_delivery_address: ->
+    @get 'delivery_address'
 
   get_billing_cc: ->
     @get 'billing_cc'

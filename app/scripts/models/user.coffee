@@ -4,19 +4,16 @@
 
 _.extend Parse.User.prototype, 
 
+  defaults: 
+    phone_number: ''
+
   fetch_related: -> 
+    @fetch()
     @get_addresses().fetch()
     @get_primary_cc().fetch()
     @get_orders().fetch 
       success: =>
         @trigger 'change:orders'
-
-  has_primary_address: ->
-    @get_addresses().length >= 1
-
-  get_primary_address: ->
-    # "Primary" address is currently just the first address
-    @get_addresses().at 0
 
   get_addresses: ->
     # Can't fetch addresses from Parse if user is not yet saved
@@ -30,6 +27,10 @@ _.extend Parse.User.prototype,
 
     @addresses
     
+  get_address_by_id: (id) ->
+    @get_addresses().find (address) ->
+      address.id == id
+
   add_address: (new_address) ->
     # Persist the relation
     new_address.save
@@ -37,6 +38,12 @@ _.extend Parse.User.prototype,
 
     # Make accessible locally
     @get_addresses().add new_address
+
+  get_phone_number: ->
+    @get 'phone_number'
+
+  set_phone_number: (val) ->
+    @set 'phone_number', val.replace(/[^0-9]/g, '').replace(/^1/, '')
 
   get_orders: ->
     # Can't fetch orders from Parse if user is not yet saved

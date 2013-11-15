@@ -51,6 +51,20 @@
   <button type="button" class="btn btn-default btn-small js-change-restaurant">Change Restaurant</button>
 </div>
 
+<div class="sub-heading">Delivered to:</div>
+
+<div class="address">
+  <div class="street">
+    <%= delivery_address.street %>
+  </div>
+
+  <div class="phone">
+    <%= phone(customer.phone_number) %> 
+  </div>
+
+  <button type="button" class="btn btn-default btn-small js-change-address">Change Delivery Address</button>
+</div>
+
 
 <div class="sub-heading">Paid for via:</div>
 

@@ -63,7 +63,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     process_restaurants = =>
       # Populated value for restaurants means we're within range... 
       if pizzabuttonapp.State.restaurants? 
-        @navigate 'ensure_address',
+        @navigate 'addresses/new',
           trigger: true
       else
         @navigate 'not_available',
@@ -76,22 +76,6 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
         @navigate 'not_available',
           trigger: true 
       message:        "Looking for pizza parlours..."
-
-  ensure_address: ->
-    if pizzabuttonapp.State.user? and pizzabuttonapp.State.user.has_primary_address()
-      # TODO: Are we near the address? If not, we still need a new one / user to pick.
-      # ...
-
-      # Apply the existing address to this order
-      default_address = pizzabuttonapp.State.user.get_primary_address()
-      pizzabuttonapp.State.order.set_delivery_address default_address
-      
-      # Continue to checking CC
-      @navigate 'ensure_cc', 
-        trigger: true
-    else
-      @navigate 'addresses/new',
-        trigger: true
 
   ensure_cc: -> 
     if pizzabuttonapp.State.user? and pizzabuttonapp.State.user.has_primary_cc()
@@ -144,6 +128,9 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
         @submit_order()
       change_restaurant: =>
         @navigate 'orders/change_restaurant',
+          trigger: true
+      change_address: =>
+        @navigate 'addresses/new',
           trigger: true
     confirm_order.render()
 

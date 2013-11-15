@@ -7,7 +7,7 @@ class pizzabuttonapp.Views.ConfirmOrderView extends pizzabuttonapp.Views.BaseVie
     events: 
       'click .js-confirm-order':        'confirm_order'
       'click .js-change-restaurant':    'select_new_restaunt'
-      'change .js-restaurant-selector': 'update_restaurant'
+      'click .js-change-address':       'select_new_address'
       'click [data-tip-amount]':        'set_tip'
 
     template_data: ->
@@ -31,6 +31,8 @@ class pizzabuttonapp.Views.ConfirmOrderView extends pizzabuttonapp.Views.BaseVie
 
       pizza_types_in_order: pizza_types_in_order
       restaurant:           summary.restaurant
+      delivery_address:     summary.delivery_address
+      customer:             summary.customer
       selected_tip:         summary.selected_tip
       grand_total:          summary.grand_total
       cc_last_four:         summary.billing_cc.last_four
@@ -53,4 +55,7 @@ class pizzabuttonapp.Views.ConfirmOrderView extends pizzabuttonapp.Views.BaseVie
 
     select_new_restaunt: ->
       @options.change_restaurant()
+
+    select_new_address: ->
+      @options.change_address()
 
