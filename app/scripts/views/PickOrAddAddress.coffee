@@ -26,7 +26,7 @@ class pizzabuttonapp.Views.PickOrAddAddressView extends pizzabuttonapp.Views.Bas
       @$('[name="new_address[zip]"]').val()
 
     get_phone_value: ->
-      @$('[name="new_address[phone_number]"]').val()
+      clean_phone @$('[name="new_address[phone_number]"]').val()
 
     use_existing_address: (e) =>
       id = $(e.target).data('address-id')
@@ -38,7 +38,7 @@ class pizzabuttonapp.Views.PickOrAddAddressView extends pizzabuttonapp.Views.Bas
       @options.next_step()  
 
     validate: ->
-      @$('.js-use-new-address').attr 'disabled', @valid()
+      @$('.js-use-new-address').attr 'disabled', !@valid()
 
     use_new_address: ->
       @new_address.set 
@@ -59,7 +59,7 @@ class pizzabuttonapp.Views.PickOrAddAddressView extends pizzabuttonapp.Views.Bas
         @options.next_step()
 
     valid: ->
-      if !@get_phone_value().match(/^1?[0-9]{10}$/)?
+      if !@get_phone_value().match(/[0-9]{10}$/)?
         return false
 
       if @get_street_value()=='' or @get_zip_value()==''
