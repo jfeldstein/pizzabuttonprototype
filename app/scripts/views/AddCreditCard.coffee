@@ -36,12 +36,14 @@ class pizzabuttonapp.Views.AddCreditCardView extends pizzabuttonapp.Views.BaseVi
           @error = response.error.message
           @render()
         else
-          @new_credit_card.set 
+          @new_credit_card.save 
             token:      response.id
             last_four:  response.card.last4
             exp_month:  response.card.exp_month
             exp_year:   response.card.exp_year
-          @use_new_credit_card()
+            ,
+              success: => @use_new_credit_card()
+              error: (e) -> console.error("TROUBLE SAVING CREDIT CARD", e)
     
     use_new_credit_card: ->
       # Attach card to user and order      
