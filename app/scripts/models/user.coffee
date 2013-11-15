@@ -36,6 +36,10 @@ _.extend Parse.User.prototype,
     new_address.save
       user: @
 
+    # Set the default phone number if not already present:
+    if @get_phone_number()==''
+      @set_phone_number new_address.get_phone_number()
+
     # Make accessible locally
     @get_addresses().add new_address
 
