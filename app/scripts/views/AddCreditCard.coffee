@@ -43,7 +43,12 @@ class pizzabuttonapp.Views.AddCreditCardView extends pizzabuttonapp.Views.BaseVi
             exp_year:   response.card.exp_year
             ,
               success: => @use_new_credit_card()
-              error: (e) -> console.error("TROUBLE SAVING CREDIT CARD", e)
+              error: @card_save_failed
+
+    card_save_failed: (card, e) =>
+      @error = e.message
+      @$('.js-save-card').attr('DISABLED', false).text("Try Again")
+      @render()
     
     use_new_credit_card: ->
       # Attach card to user and order      
