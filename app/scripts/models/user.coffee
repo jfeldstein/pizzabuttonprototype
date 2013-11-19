@@ -8,12 +8,17 @@ _.extend Parse.User.prototype,
     phone_number: ''
 
   fetch_related: -> 
-    @fetch()
-    @get_addresses().fetch()
-    @get_primary_cc().fetch()
-    @get_orders().fetch 
+    @fetch
       success: =>
-        @trigger 'change:orders'
+        @get_addresses().fetch()
+        @get_primary_cc().fetch()
+
+        # Can't fetch orders from Parse if user is not yet saved
+        if @id?
+          @get_orders().fetch 
+            success: =>
+              @get_orders().each (order) -> order.get_restaurant().fetch()
+              @trigger 'change:orders'
 
   get_addresses: ->
     # Can't fetch addresses from Parse if user is not yet saved
