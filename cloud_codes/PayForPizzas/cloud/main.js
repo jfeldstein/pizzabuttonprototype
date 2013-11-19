@@ -1,7 +1,7 @@
 var Stripe = require('stripe');
 var Mailgun = require('mailgun');
 
-Mailgun.initialize('thepizzabutton.com', '4drhb3r0h4m4');
+Mailgun.initialize('thepizzabutton.com', 'key-25baubdiq0gvqg0pdhxkt34uevb1viz1');
 Stripe.initialize('sk_test_S8Bp85jD7McsLFgK0RxUMvUT');
 
 
@@ -34,7 +34,7 @@ Parse.Cloud.beforeSave("CreditCard", function(request, response) {
   }, function(error){
     // In case there's any errors while creating the Customer
     console.error("Could not create Stripe customer: "+error);
-    return response.error('An error has occurred while attempting to save this card.');
+    return response.error('An error has occurred while attempting to save this card. Please try again.');
   });
 });
 
@@ -75,7 +75,10 @@ Parse.Cloud.beforeSave("Order", function(request, response) {
       amount:   order.get('total_charge')*100, // integer cents
       currency: 'USD',
       customer: card.get('stripe_customerid')
-    }).then(null, function(charge_error){
+    }).then(function(charge){
+      console.log("Charge '"+charge.id+"' successfull.");
+      return Parse.Promise.as(charge);
+    }, function(charge_error){
       console.error("Error charging stripe_customerid '"+card.get('stripe_customerid')+"'. Error: '"+charge_error+"'");
       return Parse.Promise.error("Charge Failed");
     })
@@ -93,16 +96,21 @@ Parse.Cloud.beforeSave("Order", function(request, response) {
     }).then(function(){
 
       // Successfully charged the order and delivered the email: 
-      console.log('SUCCESS: Charged order '+order.id+' with charge_id: '+charge.id +' and delivered order to orders@tpb');
+      console.log('SUCCESS: Charged order with charge_id: '+charge.id +' and delivered order to orders@tpb');
       return Parse.Promise.as('Success');
 
     }, function(email_error){
       // Email failed, rollback the charge
 
-      console.error("Sending order email for order "+order.id+" failed. Error:'"+email_error+"'. Refunding charge "+charge.id);
+      for(var key in email_error) {
+        console.log("KEY: "+key);
+        console.log(email_error[key]);
+      }
+
+      console.error("Sending order email failed. Error:'"+email_error+"'. Refunding charge "+charge.id);
       order.set('charge_refunded_at', new Date());
 
-      return Stripe.Charges.refund(charge.id, order.get('total_charge')).then(function(){
+      return Stripe.Charges.refund(charge.id, order.get('total_charge')*100).then(function(){
         console.log("Charge "+charge.id+" has been sucessfully refunded.");
         return Parse.Promise.as('Failed to deliver. Refunded.');
 
