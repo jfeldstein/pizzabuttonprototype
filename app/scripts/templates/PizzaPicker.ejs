@@ -1,1 +1,38 @@
-<% if(in_progress_order != null) { %><div class="return-to-order js-return-to-order"><div class="heading">Looking for your last order?</div><button type="button" class="btn btn-block btn-default js-show-last-order">Show Previous Order</button></div><% } %><h1>Pick Your Pizzas</h1><ul>  <% for(var i=0; i<pizzas.length; i++) { %>    <li data-pizza-type-id="<%= pizzas[i].id %>">      <ul>        <li><%= pizzas[i].friendly_name %></li>        <li>            Quantity:             <span class="js-quantity"><%=pizzas[i].quantity %></span>            <br />            <button class="js-add-pizza">+</button>            <button class="js-remove-pizza">-</button>        </li>        <li>            Size:             <select class="js-size-id">              <% for(var j=0; j<pizza_sizes.length; j++) { %>                <option value="<%= pizza_sizes[j].id %>" <%= (pizzas[i].size_id==pizza_sizes[j].id) ? 'SELECTED' : '' %>><%= pizza_sizes[j].friendly_name %></option>              <% } %>            </select>        </li>      </ul>    </li>  <% } %></ul><button type="button" class="btn btn-primary btn-block btn-large js-continue" <%= (!has_selected_pizza) ? 'DISABLED="DISABLED"' : '' %> >Next</button>
+<% if(in_progress_order != null) { %>
+  <div class="return-to-order js-return-to-order">
+    <div class="heading">Looking for your last order?</div>
+    <button type="button" class="btn btn-block btn-default js-show-last-order">Show Previous Order</button>
+  </div>
+<% } %>
+
+<h1>Pick Your Pizzas!</h1>
+
+<ul>
+  <% for(var i=0; i<pizzas.length; i++) { %>
+    <li data-pizza-type-id="<%= pizzas[i].id %>">
+      <ul>
+        <li><%= pizzas[i].friendly_name %></li>
+        <li>
+            Quantity: 
+            <span class="js-quantity"><%=pizzas[i].quantity %></span>
+
+            <br />
+
+            <button class="js-add-pizza">+</button>
+            <button class="js-remove-pizza">-</button>
+        </li>
+        <li>
+            Size: 
+            <select class="js-size-id">
+              <% for(var j=0; j<pizza_sizes.length; j++) { %>
+                <option value="<%= pizza_sizes[j].id %>" <%= (pizzas[i].size_id==pizza_sizes[j].id) ? 'SELECTED' : '' %>><%= pizza_sizes[j].friendly_name %></option>
+              <% } %>
+            </select>
+        </li>
+      </ul>
+    </li>
+  <% } %>
+
+</ul>
+
+<button type="button" class="btn btn-primary btn-block btn-large js-continue" <%= (!has_selected_pizza) ? 'DISABLED="DISABLED"' : '' %> >Next</button>
