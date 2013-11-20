@@ -25,6 +25,9 @@ class pizzabuttonapp.Views.BaseView extends Backbone.View
 
 
     render: =>
+      $(".header-icon").removeClass("active")
+      if @active_view
+        $("#header").find(".#{@active_view}").addClass("active")
       @$el.html @template @_template_data()
       pizzabuttonapp.Views.ViewPusher.render @el
       @delegateEvents()

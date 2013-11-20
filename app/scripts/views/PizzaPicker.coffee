@@ -3,6 +3,7 @@
 class pizzabuttonapp.Views.PizzaPickerView extends pizzabuttonapp.Views.BaseView
 
   template: JST['app/scripts/templates/PizzaPicker.ejs']
+  active_view: "order"
 
   initialize: ->
     @listenTo @model.get('customer'), 'change:orders', @render

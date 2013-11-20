@@ -3,6 +3,7 @@
 class pizzabuttonapp.Views.AddCreditCardView extends pizzabuttonapp.Views.BaseView
 
     template: JST['app/scripts/templates/AddCreditCard.ejs']
+    active_view: "payment"
 
     events: 
       'click .js-save-card': 'save_card'

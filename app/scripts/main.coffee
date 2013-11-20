@@ -1,3 +1,11 @@
+USE_DUMMY_DATA = true
+
+DUMMY_LOCATION =
+  zip:    "94115"
+  state:  "CA"
+  city:   "San Francisco"
+  geo_point: new Parse.GeoPoint 37.7642064, -122.4654489
+
 window.pizzabuttonapp =
   Models: {}
   Collections: {}
@@ -132,6 +140,10 @@ window.getConfig = (config_name, cb) ->
   
 # Put phonegap location implementation here
 getLocation = (cb) ->
+  if USE_DUMMY_DATA
+    cb DUMMY_LOCATION
+    return
+
   # TODO: Call to phone gap will give us lat/lon
   lat = 37.7642064
   lon = -122.4654489

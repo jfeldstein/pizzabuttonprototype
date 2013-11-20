@@ -3,6 +3,7 @@
 class pizzabuttonapp.Views.PickOrAddAddressView extends pizzabuttonapp.Views.BaseView
 
     template: JST['app/scripts/templates/PickOrAddAddress.ejs']
+    active_view: "address"
 
     events: 
       'keyup input':                    'validate'
@@ -29,7 +30,7 @@ class pizzabuttonapp.Views.PickOrAddAddressView extends pizzabuttonapp.Views.Bas
       clean_phone @$('[name="new_address[phone_number]"]').val()
 
     use_existing_address: (e) =>
-      id = $(e.target).data('address-id')
+      id = $(e.currentTarget).data('address-id')
 
       address = pizzabuttonapp.State.user.get_address_by_id id
 
