@@ -67,7 +67,7 @@ Parse.Cloud.beforeSave("Order", function(request, response) {
     // Reject the order if card doesn't already have a customer ID 
     // Bad State.
     if(!card.has('stripe_customerid')) {
-      return Parse.Promise.error("Cannot charge Order to a cc with no Customer ID");
+      return Parse.Promise.error("NO_CUSTOMER_ID");
     }
 
     // Charge the customer for the order
@@ -80,7 +80,7 @@ Parse.Cloud.beforeSave("Order", function(request, response) {
       return Parse.Promise.as(charge);
     }, function(charge_error){
       console.error("Error charging stripe_customerid '"+card.get('stripe_customerid')+"'. Error: '"+charge_error+"'");
-      return Parse.Promise.error("Charge Failed");
+      return Parse.Promise.error("CHARGE_FAILED");
     })
   })
 
@@ -102,22 +102,17 @@ Parse.Cloud.beforeSave("Order", function(request, response) {
     }, function(email_error){
       // Email failed, rollback the charge
 
-      for(var key in email_error) {
-        console.log("KEY: "+key);
-        console.log(email_error[key]);
-      }
-
       console.error("Sending order email failed. Error:'"+email_error+"'. Refunding charge "+charge.id);
       order.set('charge_refunded_at', new Date());
 
       return Stripe.Charges.refund(charge.id, order.get('total_charge')*100).then(function(){
         console.log("Charge "+charge.id+" has been sucessfully refunded.");
-        return Parse.Promise.as('Failed to deliver. Refunded.');
+        return Parse.Promise.error('DELIVERY_FAILURE');
 
       }, function(refund_error){
-        order.set('refund_error', refund_error);
         console.error("Charge "+charge.id+" for order "+order.id+" failed to refund! Error:'"+refund_error+"'");
-        return Parse.Promise.as('Failed to deliver. Failed to refund!');
+        order.set('refund_error', refund_error);
+        return Parse.Promise.error('DELIVERY_AND_REFUND_FAILURE');
       })
     });
   })
@@ -126,9 +121,13 @@ Parse.Cloud.beforeSave("Order", function(request, response) {
   // 3. Cleanup and save whatever happened
   .then(function(){
     // Save the object
+    order.set('successfully_placed', true);
     return response.success();
-  }, function(){
+  }, function(error){
     // Save the object anyway, the client will deduce if everything worked. 
+    order.set('successfully_placed', false);
+    order.set('error', error);
+
     return response.success();
   });
 });
