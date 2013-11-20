@@ -62,9 +62,11 @@ _.extend Parse.User.prototype,
     if !@orders?
       order_query = new Parse.Query(pizzabuttonapp.Models.OrderModel)
       order_query.equalTo('customer', @)
-      @orders = order_query.collection()
+      order_query.descending('createdAt')
+      @orders = new pizzabuttonapp.Collections.OrderCollection [],
+        query: order_query
 
-    @orders
+    @orders 
 
   get_in_progress_order: ->
     most_recent_order = @get_orders().at(0)

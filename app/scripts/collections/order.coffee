@@ -1,4 +1,4 @@
 'use strict';
 
-class pizzabuttonapp.Collections.OrderCollection extends Backbone.Collection
+class pizzabuttonapp.Collections.OrderCollection extends Parse.Collection
   model: pizzabuttonapp.Models.OrderModel
