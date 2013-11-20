@@ -55,7 +55,7 @@ class pizzabuttonapp.Views.PizzaPickerView extends pizzabuttonapp.Views.BaseView
         type_id: type.id
 
     # Is there a recent order? (Give the view null, or a hash)
-    in_progress_order = @model.get('customer').get_in_progress_order()
+    in_progress_order = pizzabuttonapp.State.user.get_in_progress_order()
     if in_progress_order?
       in_progress_order = in_progress_order.toJSON()
 
