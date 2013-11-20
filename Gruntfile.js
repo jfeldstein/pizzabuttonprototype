@@ -1,5 +1,4 @@
 'use strict';
-
 var LIVERELOAD_PORT = 35729;
 var SERVER_PORT = 9000;
 var lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT});
@@ -15,8 +14,6 @@ var mountFolder = function (connect, dir) {
 // templateFramework: 'lodash'
 
 module.exports = function (grunt) {
-    grunt.loadNpmTasks('grunt-haml');
-
     // show elapsed time at the end
     require('time-grunt')(grunt);
     // load all grunt tasks
@@ -69,13 +66,6 @@ module.exports = function (grunt) {
             test: {
                 files: ['<%= yeoman.app %>/scripts/{,*/}*.js', 'test/spec/**/*.js'],
                 tasks: ['test']
-            },
-            haml: {
-                files: [
-                    'app/*.haml',
-                    'app/scripts/templates/*.haml'
-                ],
-                tasks: ['haml']
             }
         },
         connect: {
@@ -263,19 +253,6 @@ module.exports = function (grunt) {
                 }]
             }
         },
-        haml: {
-            index: {
-                src: "app/index.haml",
-                dest: "app/index.html"
-            },
-            compile: {
-                files: grunt.file.expandMapping(['app/scripts/templates/*.haml'], '', {
-                    rename: function(base, path) {
-                        return base + path.replace(/\.haml$/, '.ejs');
-                    }
-                })
-            }
-        },
         bower: {
             all: {
                 rjsConfig: '<%= yeoman.app %>/scripts/main.js'
@@ -332,7 +309,6 @@ module.exports = function (grunt) {
             'compass:server',
             'connect:livereload',
             'open',
-            'haml',
             'watch'
         ]);
     });
