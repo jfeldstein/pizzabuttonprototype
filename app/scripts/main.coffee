@@ -42,8 +42,8 @@ window.pizzabuttonapp =
     
     routes = new pizzabuttonapp.Routers.AppRouter
 
-    # TODO: Have the user stay logged in between app-loads
     pizzabuttonapp.State.user = getUserForAppState()
+    pizzabuttonapp.State.user.fetch_related()
 
     pizzabuttonapp.State.order = new pizzabuttonapp.Models.OrderModel
       customer: pizzabuttonapp.State.user
@@ -162,17 +162,15 @@ getLocation = (cb) ->
 getUserForAppState = -> 
   # Fetch related compenents to get started with user. 
 
-  if current_user = Parse.User.current()
-    current_user.fetch_related()
-  else
+  current_user = Parse.User.current()
+  
+  if !current_user?
     current_user = new Parse.User
       username: randomString 40
       password: randomString 40
 
     # TODO: Figure out some way to handle errors when creating these anonymous users.
     current_user.signUp
-      success: ->
-        current_user.fetch_related()
       error: ->
         console.error "FAILURE FETCHING USER", arguments
 

@@ -26,8 +26,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
       return_to_order: => 
         in_progress_order = pizzabuttonapp.State.user.get_in_progress_order()
         pizzabuttonapp.State.order = in_progress_order
-        id = in_progress_order.id
-        @navigate "orders/#{id}",
+        @navigate "orders/#{in_progress_order.id}",
           trigger: true
     pizzapicker.render()
 
