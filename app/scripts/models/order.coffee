@@ -124,4 +124,10 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
       error: ->
         console.log "Failure saving order", arguments
 
+  is_successfully_placed: -> 
+    !!@get('successfully_placed')
+
+  is_credit_card_declined: ->
+    @get('error') == 'CHARGE_FAILED'
+
 
