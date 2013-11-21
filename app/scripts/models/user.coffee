@@ -17,7 +17,6 @@ _.extend Parse.User.prototype,
         if @id?
           @get_orders().fetch 
             success: =>
-              @get_orders().each (order) -> order.get_restaurant().fetch()
               @trigger 'change:orders'
 
   get_addresses: ->

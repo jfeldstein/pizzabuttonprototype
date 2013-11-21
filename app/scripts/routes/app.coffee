@@ -134,19 +134,39 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     confirm_order.render()
 
   show_order: (id) ->
-    order_placed = new pizzabuttonapp.Views.OrderPlacedView
-      model: pizzabuttonapp.State.order
-      order_again: => 
-        # Reset the order 
-        pizzabuttonapp.State.order = new pizzabuttonapp.Models.OrderModel
-          customer: pizzabuttonapp.State.user
-          restaurant: pizzabuttonapp.State.restaurants.at(0)
+    order_ready = $.Deferred (defer) ->
+      if pizzabuttonapp.State.order.id == id
+        defer.resolve()
+      else 
+        pizzabuttonapp.State.order = new pizzabuttonapp.Models.OrderModel 
+          objectId: id
 
-        # Go back to the menu
-        @navigate 'orders/new',
-          trigger: true
-          
-    order_placed.render()
+        pizzabuttonapp.State.order.fetch
+          success: defer.resolve
+          error: defer.reject
+
+
+    $.when(order_ready).then =>
+      order_placed = new pizzabuttonapp.Views.OrderPlacedView
+        model: pizzabuttonapp.State.order
+        resubmit_order: =>
+          rotateOrder()
+          @submit_order()
+        change_card: => 
+          rotateOrder()
+          @navigate 'credit_cards/new',
+            trigger: true
+        new_order: => 
+          # Reset the order 
+          pizzabuttonapp.State.order = new pizzabuttonapp.Models.OrderModel
+            customer: pizzabuttonapp.State.user
+            restaurant: pizzabuttonapp.State.restaurants.at(0)
+
+          # Go back to the menu
+          @navigate 'orders/new',
+            trigger: true
+            
+      order_placed.render()
 
   submit_order: ->
     pizzabuttonapp.State.order.submit

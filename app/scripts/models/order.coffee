@@ -20,6 +20,20 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
     # Hack, if the order is created with an app-domain RestaurantModel object, put it where the get_restaurant hack expects it to be. 
     @restaurant = @get('restaurant') if @get('restaurant') instanceof pizzabuttonapp.Models.RestaurantModel
 
+
+  # TODO: Trying to wrap fetch in something that adds extra steps to the end of the
+  # deferred, but it's not working. We need it to fetch the order, then fetch related items, 
+  # then call whatever success handler came in at the top, if there was one.
+  fetch: (options) ->
+    console.log("Fetching order")
+    (OrderModel.__super__.fetch.apply(this, [])).then => 
+      d = $.when @get_restaurant().fetch(), @get_delivery_address().fetch() 
+      d.then -> 
+        console.log("Succeeding", options.success?) 
+        options.success() if options.success?
+      d
+    
+
   summary: ->
     pizzas:       @get('pizzas')
     restaurant:   @get_restaurant().toJSON()    if @has('restaurant')

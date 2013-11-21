@@ -3,7 +3,9 @@
 class pizzabuttonapp.Views.OrderPlacedView extends pizzabuttonapp.Views.BaseView
 
     events: 
-      'click .js-new-order': 'new_order'
+      'click .js-new-order':    'new_order'
+      'click .js-resubmit':     'resubmit_order'
+      'click .js-change-card':  'change_card'
 
     template_data: ->
       @model.summary()
@@ -15,4 +17,12 @@ class pizzabuttonapp.Views.OrderPlacedView extends pizzabuttonapp.Views.BaseView
         else JST['app/scripts/templates/OrderFailOther.ejs']
 
     new_order: => 
-      @options.order_again()
+      @options.new_order()
+
+    resubmit_order: => 
+      @$('.js-header').text("Re-Running Your Order...")
+      @$('.js-resubmit').attr('DISABLED', true).text("Trying again...")
+      @options.resubmit_order()
+
+    change_card: => 
+      @options.change_card()
