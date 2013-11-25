@@ -1,4 +1,18 @@
-USE_DUMMY_DATA = true
+
+# console = new Object();
+# console.log = (log) ->
+#   iframe = document.createElement("IFRAME");
+#   iframe.setAttribute("src", "ios-log:#iOS#" + log);
+#   document.documentElement.appendChild(iframe);
+#   iframe.parentNode.removeChild(iframe);
+#   iframe = null;    
+
+# console.debug = console.log;
+# console.info = console.log;
+# console.warn = console.log;
+# console.error = console.log;
+
+USE_DUMMY_DATA = false
 
 DUMMY_LOCATION =
   zip:    "94115"
@@ -47,7 +61,6 @@ window.pizzabuttonapp =
 
     pizzabuttonapp.State.order = new pizzabuttonapp.Models.OrderModel
       customer: pizzabuttonapp.State.user
-
     getLocation (loc) =>
       @State.location = loc
       getRestaurants (restaurants) =>
@@ -137,27 +150,43 @@ window.getConfig = (config_name, cb) ->
 
     error: configError
 
-  
+
+locationCallbacks = []
+window.locationUpdated = (lat, lng) ->
+  window.latitude = lat
+  window.longitude = lng
+  for cb in locationCallbacks
+    cb(lat,lng)
+  locationCallbacks = []
+
+
+createGeocodeCallback = (cb) ->
+  (lat, lon) ->
+    # TODO: Call to phone gap will give us lat/lon
+    # lat = 37.7642064
+    # lon = -122.4654489
+
+    lm = new LocationManager
+    lm.reverseGeoCode lat, lon, (err, result) ->
+      # TODO: Better support for geo errors...
+      throw err if err? 
+      cb
+        zip:    result.zip
+        state:  result.state
+        city:   result.city
+        geo_point: new Parse.GeoPoint lat, lon
+
 # Put phonegap location implementation here
 getLocation = (cb) ->
   if USE_DUMMY_DATA
     cb DUMMY_LOCATION
     return
+  if (window.latitude)
+    createGeocodeCallback(cb)(window.latitude, longitude)
+    return
 
-  # TODO: Call to phone gap will give us lat/lon
-  lat = 37.7642064
-  lon = -122.4654489
-
-  lm = new LocationManager
-  lm.reverseGeoCode lat, lon, (err, result) ->
-    # TODO: Better support for geo errors...
-    throw err if err? 
-
-    cb
-      zip:    result.zip
-      state:  result.state
-      city:   result.city
-      geo_point: new Parse.GeoPoint lat, lon
+  locationCallbacks.push createGeocodeCallback(cb)
+ 
 
 getUserForAppState = -> 
   # Fetch related compenents to get started with user. 
@@ -191,10 +220,9 @@ window.randomString = (len, charSet) ->
 
     randomString
 
-getRestaurants = (cb) -> 
+getRestaurants = (cb) ->
   location = pizzabuttonapp.State.location.geo_point
   radius   = pizzabuttonapp.Config.delivery_radius
-
   query = new Parse.Query(pizzabuttonapp.Models.RestaurantModel)
   query.withinMiles 'coordinates', location, radius
   restaurants = query.collection()
