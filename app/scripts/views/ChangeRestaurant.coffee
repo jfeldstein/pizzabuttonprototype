@@ -24,7 +24,7 @@ class pizzabuttonapp.Views.ChangeRestaurantView extends pizzabuttonapp.Views.Bas
       rest = pizzabuttonapp.State.restaurants.find (this_rest) ->
         this_rest.id == rest_id
 
-      @model.set 'restaurant', rest
+      @model.set_restaurant rest
 
       @options.return_to_order()
 

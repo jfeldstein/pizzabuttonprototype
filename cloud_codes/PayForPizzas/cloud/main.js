@@ -53,7 +53,7 @@ Parse.Cloud.beforeSave("Order", function(request, response) {
   var card  = order.get('billing_cc');
 
   // Don't double charge orders
-  if(order.has('stripe_charge_id')) {
+  if(order.has('stripe_chargeid')) {
     return response.success();
   }
 
@@ -76,9 +76,14 @@ Parse.Cloud.beforeSave("Order", function(request, response) {
       currency: 'USD',
       customer: card.get('stripe_customerid')
     }).then(function(charge){
-      console.log("Charge '"+charge.id+"' successfull.");
+      console.log("Charge '"+charge.id+"' successfull, but we're saying it failed....");
       return Parse.Promise.as(charge);
     }, function(charge_error){
+      for( i in arguments ) {
+        for( j in arguments[i] ) {
+          console.log(i+", "+j+" "+arguments[i][j]);
+        }
+      }
       console.error("Error charging stripe_customerid '"+card.get('stripe_customerid')+"'. Error: '"+charge_error+"'");
       return Parse.Promise.error("CHARGE_FAILED");
     })
