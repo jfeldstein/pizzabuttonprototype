@@ -13,7 +13,7 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
     pizzas = {}
     _.each pizzabuttonapp.Config.pizza_types, (type) =>
       pizzas[type.id] = 
-        size_id: pizzabuttonapp.Config.pizza_sizes[0].id
+        size_id: pizzabuttonapp.Config.pizza_sizes[2].id
         quantity: 0
     @set 'pizzas', pizzas
 
