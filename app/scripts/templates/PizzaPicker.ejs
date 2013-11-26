@@ -9,7 +9,7 @@
 
 <ul>
   <% for(var i=0; i<pizzas.length; i++) { %>
-    <li data-pizza-type-id="<%= pizzas[i].id %>">
+    <li data-pizza-type-id="<%= pizzas[i].id %>" class="<%= (pizzas[i].quantity >0) ? 'already-in-order' : '' %>">
       <ul>
         <li><%= pizzas[i].friendly_name %></li>
         <li><button class="js-add-pizza">+</button></li>
