@@ -3,6 +3,7 @@
 class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
   routes:
     'orders/new':      'new_order'
+    'additional_pizza':'additional_pizza'
     'wait_for_panic':  'wait_for_panic'
     'sessions/new':    'new_session'
     'wait_for_loc':    'wait_for_location'
@@ -23,10 +24,19 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
       next_step: =>
         @navigate 'wait_for_panic', 
           trigger: true
+      show_previous_order: true
       return_to_order: => 
         in_progress_order = pizzabuttonapp.State.user.get_in_progress_order()
         pizzabuttonapp.State.order = in_progress_order
         @navigate "orders/#{in_progress_order.id}",
+          trigger: true
+    pizzapicker.render()
+
+  additional_pizza: ->
+    pizzapicker = new pizzabuttonapp.Views.PizzaPickerView 
+      model: pizzabuttonapp.State.order
+      next_step: =>
+        @navigate 'orders/confirm', 
           trigger: true
     pizzapicker.render()
 
@@ -123,6 +133,9 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
   confirm_order: ->
     confirm_order = new pizzabuttonapp.Views.ConfirmOrderView
       model: pizzabuttonapp.State.order
+      select_additional: => 
+        @navigate 'additional_pizza',
+          trigger: true
       next_step: =>
         @submit_order()
       change_restaurant: =>

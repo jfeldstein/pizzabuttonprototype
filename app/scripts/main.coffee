@@ -12,7 +12,7 @@
 # console.warn = console.log;
 # console.error = console.log;
 
-USE_DUMMY_DATA = false
+USE_DUMMY_DATA = true
 
 DUMMY_LOCATION =
   zip:    "94115"

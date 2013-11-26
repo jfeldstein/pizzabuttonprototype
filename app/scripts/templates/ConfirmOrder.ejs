@@ -4,15 +4,26 @@
   
   <!-- List pizzas first -->
   <% for(var i=0; i<pizza_types_in_order.length; i++) { %>
-    <dt class="pizza">
+    <dt class="pizza" data-pizza-type-id="<%= pizza_types_in_order[i].type.id %>">
       <%= pizza_types_in_order[i].quantity + 'x' %>
+
       <%= pizza_types_in_order[i].size_name %>
-      <%= pizza_types_in_order[i].type_name %>
+      <select class="js-size-id">
+        <% for(var j=0; j<pizza_sizes.length; j++) { %>
+          <option value="<%= pizza_sizes[j].id %>" <%= (pizza_types_in_order[i].size_id==pizza_sizes[j].id) ? 'SELECTED' : '' %>><%= pizza_sizes[j].friendly_name %></option>
+        <% } %>
+      </select>
+      <%= pizza_types_in_order[i].type.friendly_name %>
+      <button class="js-add-pizza">+</button>
+      <button class="js-remove-pizza">-</button>
     </dt>
     <dd class="pizza">
       <%= money(pizza_types_in_order[i].subtotal) %>
     </dd>
-  <% } %>  
+  <% } %> 
+
+  <!-- Then, option to add more pizzas -->
+  <button class="js-select-additional">Add pizza</button>
 
   <!-- Other charges underneath, should be smaller/grey -->
   <dt class="other">Service Fee</dt>
