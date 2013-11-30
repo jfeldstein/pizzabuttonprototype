@@ -2,7 +2,7 @@
 <% if (existing_addresses.length > 0) { %>
   <% for(var i=0; i<existing_addresses.length; i++) { %>
     <div class="action-container js-use-existing-address" data-address-id="<%= existing_addresses[i].objectId %>">
-      <div class="action-container-button"></div>
+      <div class="action-container-button confirm"></div>
       <%= existing_addresses[i].street %> <br />
       <%= phone( existing_addresses[i].phone_number) %>
     </div>
@@ -26,6 +26,6 @@
     <input type="numbers" name="new_address[phone_number]" value="<%= phone(new_address.phone_number) %>" placeholder="Phone Number..." />
   </div>
 
-  <button class="action js-use-new-address" DISABLED='DISABLED'>Use New Address</button>
+  <button class="action js-use-new-address <%= (existing_addresses.length == 0) ? 'confirm' : '' %>" DISABLED='DISABLED'>Use New Address</button>
 </div>
 
