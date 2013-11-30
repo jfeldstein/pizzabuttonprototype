@@ -1,13 +1,12 @@
 
-<ul class="restaurants-list">
+<div class="restaurants-list">
   <% for(var i=0; i<restaurants.length; i++) { %>
-    <li class="restaurant">
-      <input type="radio" name="restaurant" value="<%= restaurants[i].objectId %>" <% if(restaurants[i].objectId==current_id) { %> CHECKED="CHECKED" <% } %>> 
+    <div class="restaurant action-container" data-restaurant-id="<%= restaurants[i].objectId %>">
+      <div class="action-container-button confirm">
+        <div class="new-total"><%= money(restaurants[i].new_total) %></div>
+      </div>
       <div class="name"><%= restaurants[i].name %></div>
-      <div class="street">on <%= restaurants[i].address.street %></div>
-      <div class="new-total"><%= money(restaurants[i].new_total) %></div>
-    </li>
+      <div class="street"><%= restaurants[i].address.street %></div>
+    </div>
   <% } %>
-</ul>
-
-<button type="button" class="js-cancel">Cancel</button>
+</div>

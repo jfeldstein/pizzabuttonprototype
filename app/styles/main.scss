@@ -85,6 +85,10 @@ hr {
   font-size: 16px;
   padding-top: 10px;
   position: relative;
+
+  &+.action-container {
+    margin-top: 10px;
+  }
 }
 
 .action-container-button {
@@ -96,10 +100,28 @@ hr {
   height: 60px;
   background: $color_red url(/images/next-arrow.png) center center no-repeat;
   background-size: 100% 100%;
+
+  &.confirm {
+    background-color: $color_green;
+  }
 }
 
 .new-credit-card {
   input {
     margin-bottom: 20px;
+  }
+}
+
+.restaurants-list {
+  .restaurant {
+    .action-container-button {
+      background-image: initial;
+      text-align: center;
+      color: white;
+      font-size: 20px;
+      height: 37px;
+      padding: 12px 0;
+      line-height: 38px;
+    }
   }
 }
