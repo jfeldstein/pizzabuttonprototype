@@ -22,7 +22,9 @@ module.exports = function (grunt) {
     // configurable paths
     var yeomanConfig = {
         app: 'app',
-        dist: 'dist'
+        dist: 'dist',
+        iphone: 'natives/iphone/The\ Pizza\ Button/dist',
+        android: 'natives/android/assets'
     };
 
     grunt.initConfig({
@@ -115,6 +117,7 @@ module.exports = function (grunt) {
         },
         clean: {
             dist: ['.tmp', '<%= yeoman.dist %>/*'],
+            natives: ['<%= yeoman.iphone %>/*', '<%= yeoman.android %>/*'],
             server: '.tmp'
         },
         jshint: {
@@ -251,6 +254,22 @@ module.exports = function (grunt) {
                         'bower_components/sass-bootstrap/fonts/*.*'
                     ]
                 }]
+            },
+            natives: {
+                files: [
+                    {
+                        expand: true, 
+                        cwd: '<%= yeoman.dist %>',
+                        src: ['**'], 
+                        dest: '<%= yeoman.iphone %>'
+                    },
+                    {
+                        expand: true, 
+                        cwd: '<%= yeoman.dist %>',
+                        src: ['**'], 
+                        dest: '<%= yeoman.android %>'
+                    }
+                ]
             }
         },
         bower: {
@@ -336,9 +355,11 @@ module.exports = function (grunt) {
         'concat',
         'cssmin',
         'uglify',
-        'copy',
+        'copy:dist',
         'rev',
-        'usemin'
+        'usemin',
+        'clean:natives',
+        'copy:natives'
     ]);
 
     grunt.registerTask('default', [
