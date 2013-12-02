@@ -19,6 +19,7 @@ class pizzabuttonapp.Views.PickOrAddAddressView extends pizzabuttonapp.Views.Bas
 
       existing_addresses: pizzabuttonapp.State.user.get_addresses().toJSON()
       new_address:        @new_address.toJSON()
+      name:               @model.get('name')
 
     get_street_value: ->
       @$('[name="new_address[street]"]').val()
@@ -28,6 +29,9 @@ class pizzabuttonapp.Views.PickOrAddAddressView extends pizzabuttonapp.Views.Bas
 
     get_phone_value: ->
       clean_phone @$('[name="new_address[phone_number]"]').val()
+
+    get_name_value: -> 
+      @$('[name="new_address[name]"]').val()
 
     use_existing_address: (e) =>
       id = $(e.currentTarget).data('address-id')
@@ -46,6 +50,8 @@ class pizzabuttonapp.Views.PickOrAddAddressView extends pizzabuttonapp.Views.Bas
         street: @get_street_value()
         zip:    @get_zip_value()
         phone_number: @get_phone_value()
+
+      @model.set 'name', @get_name_value()
 
       lm = new LocationManager
       lm.geoCode @new_address.toJSON(), (err, result) =>
@@ -66,4 +72,8 @@ class pizzabuttonapp.Views.PickOrAddAddressView extends pizzabuttonapp.Views.Bas
       if @get_street_value()=='' or @get_zip_value()==''
         return false
 
+      if @get_name_value()==''
+        return false
+
       true
+

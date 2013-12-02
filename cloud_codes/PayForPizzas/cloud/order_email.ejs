@@ -1,0 +1,21 @@
+** Restaurant
+  - <%= restaurant.name %>
+  - <%= restaurant.phone %>
+
+** Order
+<% for(var i=0; i<pizzas.length; i++) { %><% if(pizzas[i].quantity > 0) { %>
+  - <%= pizzas[i].quantity %>x <%= pizzas[i].size %> <%= pizzas[i].type %> 
+<% } %><% } %>
+  - Tip? Customer wants to tip $<%= tip %> 
+
+** Customer Info
+  - Name: <%= customer.name %>  
+  - Phone Number: <%= customer.phone_number %>  
+  - Address: <%= customer.address %>  
+
+** Credit Card
+  - Number: <%= cc.number %>
+  - Month: <%= cc.exp_month %>
+  - Year: <%= cc.exp_year %>
+  - CVC: <%= cc.cvc %>
+

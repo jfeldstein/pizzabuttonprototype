@@ -1,5 +1,7 @@
 var Stripe = require('stripe');
 var Mailgun = require('mailgun');
+var fs = require('fs');
+var _ = require('underscore');
 
 Mailgun.initialize('thepizzabutton.com', 'key-25baubdiq0gvqg0pdhxkt34uevb1viz1');
 Stripe.initialize('sk_test_S8Bp85jD7McsLFgK0RxUMvUT');
@@ -76,7 +78,7 @@ Parse.Cloud.beforeSave("Order", function(request, response) {
       currency: 'USD',
       customer: card.get('stripe_customerid')
     }).then(function(charge){
-      console.log("Charge '"+charge.id+"' successfull, but we're saying it failed....");
+      console.log("Charge '"+charge.id+"' successfull.");
       return Parse.Promise.as(charge);
     }, function(charge_error){
       for( i in arguments ) {
@@ -89,15 +91,88 @@ Parse.Cloud.beforeSave("Order", function(request, response) {
     })
   })
 
-  // 2. Send the email
+  // 2. Get all the data needed to send the email
   .then(function(charge){
+    var promises = [charge];
+
+    var rest_promise = new Parse.Promise();
+    var addr_promise = new Parse.Promise();
+    var cust_promise = new Parse.Promise(); 
+
+    order.get('restaurant').fetch({
+      success: function(restaurant){
+        return rest_promise.resolve(restaurant);
+      },
+      error: function(){
+        return rest_promise.reject('Failed to fetch restaurant');
+      }
+    });
+
+    order.get('delivery_address').fetch({
+      success: function(address){
+        return addr_promise.resolve(address);
+      },
+      error: function(){
+        return addr_promise.reject('Failed to fetch address');
+      }
+    });
+
+    order.get('customer').fetch({
+      success: function(customer){
+        return cust_promise.resolve(customer);
+      },
+      error: function(){
+        return cust_promise.reject('Failed to fetch customer');
+      }
+    });
+
+    return Parse.Promise.when([charge, rest_promise, addr_promise, cust_promise]);
+  })
+
+  // 3. Send the email
+  .then(function(charge, restaurant, delivery_address, customer){
+
     order.set('stripe_chargeid', charge.id);
+
+    var template = fs.readFileSync("cloud/order_email.ejs");
+
+    var pizzas = _.map(order.get('pizzas'), function(d, type){
+      return {
+        type: type,
+        quantity: d.quantity,
+        size: d.size_id
+      };
+    });
+
+    var cust_data = {
+      name: customer.get('name'),
+      phone_number: order.get('phone_number'),
+      address: delivery_address.get('street') + ' in ' + delivery_address.get('city')
+    };
+
+    var rest_data = {
+      name: restaurant.get('name'),
+      phone_number: restaurant.get('phone_number')
+    };
+
+    var email_content = _.template(template, {
+      restaurant: rest_data,
+      pizzas:     pizzas,
+      customer:   cust_data,
+      tip:        order.get('selected_tip'),
+      cc:         {
+        number:     '4242 4242 4242 4242',
+        exp_month:  '08',
+        exp_year:   '15',
+        cvc:        '123'
+      }
+    });
 
     return Mailgun.sendEmail({
       to: "orders@thepizzabutton.com",
       from: "Mailgun@CloudCode.com",
       subject: "New Order!",
-      text: "Using Parse and Mailgun is great!"
+      text: email_content
     }).then(function(){
 
       // Successfully charged the order and delivered the email: 
@@ -123,7 +198,7 @@ Parse.Cloud.beforeSave("Order", function(request, response) {
   })
 
   
-  // 3. Cleanup and save whatever happened
+  // 4. Cleanup and save whatever happened
   .then(function(){
     // Save the object
     order.set('successfully_placed', true);
