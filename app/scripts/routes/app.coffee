@@ -62,7 +62,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
         @navigate "wait_for_restaurants", 
           trigger: true
       continue_when: -> 
-        pizzabuttonapp.State.location? 
+        false and pizzabuttonapp.State.location? 
       give_up: => 
         @navigate 'not_available',
           trigger: true 

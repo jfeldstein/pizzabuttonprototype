@@ -1,7 +1,7 @@
 @import "_colors";
 @import "_metrics";
 
-button.action {
+a.button.action, button.action {
   box-sizing: border-box;
   display: block;
   height: $input_height;
@@ -21,6 +21,22 @@ button.action {
 
   &:disabled {
     opacity: 0.5;
+  }
+}
+
+/* Fix for buttons made of links */
+a.button.action {
+  padding-top: 13px;
+  text-decoration: none;
+}
+.allow-a-button-to-truncate {
+  display: flex;
+  
+  a.button {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;    
+    min-width: 0;
   }
 }
 
