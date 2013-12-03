@@ -6,12 +6,14 @@ class pizzabuttonapp.Views.AddCreditCardView extends pizzabuttonapp.Views.BaseVi
     active_view: "payment"
 
     events: 
-      'click .js-save-card': 'save_card'
+      'click .js-save-card':          'save_card'
+      'click .js-use-existing-card':  'use_existing_card'
 
     initialize: ->
       @new_credit_card = new pizzabuttonapp.Models.CreditCardModel
 
     template_data: ->
+      existing_card:    pizzabuttonapp.State.user.get_primary_cc().toJSON() if pizzabuttonapp.State.user.has_primary_cc()
       new_credit_card:  @new_credit_card.toJSON()
       error:            @error if @error?
 
@@ -21,6 +23,9 @@ class pizzabuttonapp.Views.AddCreditCardView extends pizzabuttonapp.Views.BaseVi
       # Add cc field superpowers
       @$('[name="new_credit_card[number]"]').payment('formatCardNumber')
       @$('[name="new_credit_card[cvc]"]').payment('formatCardCVC')
+
+    use_existing_card: ->
+      @use_card pizzabuttonapp.State.user.get_primary_cc()
 
     save_card: ->
       @$('.js-save-card').attr('DISABLED', 'DISABLED').text("Saving Your Card...")
@@ -43,7 +48,7 @@ class pizzabuttonapp.Views.AddCreditCardView extends pizzabuttonapp.Views.BaseVi
             exp_month:  response.card.exp_month
             exp_year:   response.card.exp_year
             ,
-              success: => @use_new_credit_card()
+              success: => @use_card(@new_credit_card)
               error: @card_save_failed
 
     card_save_failed: (card, e) =>
@@ -51,10 +56,10 @@ class pizzabuttonapp.Views.AddCreditCardView extends pizzabuttonapp.Views.BaseVi
       @$('.js-save-card').attr('DISABLED', false).text("Try Again")
       @render()
     
-    use_new_credit_card: ->
+    use_card: (card) ->
       # Attach card to user and order      
-      pizzabuttonapp.State.user.set_primary_cc @new_credit_card
-      pizzabuttonapp.State.order.set_billing_cc @new_credit_card
+      pizzabuttonapp.State.user.set_primary_cc card
+      pizzabuttonapp.State.order.set_billing_cc card
 
       # Go to next step
       @options.next_step()

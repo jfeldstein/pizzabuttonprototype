@@ -1,3 +1,13 @@
+<% if (existing_card) { %>
+  <h1>Use saved card</h1>
+  <div class="action-container js-use-existing-card">
+    <div class="action-container-button confirm"></div>
+    **** **** **** <%= existing_card.last_four %> <br />
+    Expires: <%= existing_card.exp_month %> / <%= existing_card.exp_year %>
+  </div>
+  <hr />
+<% } %>
+
 <h1>Add your card</h1>
 
 <% if(error) { %>
