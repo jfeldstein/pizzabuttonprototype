@@ -37,13 +37,15 @@ class pizzabuttonapp.Views.PizzaPickerView extends pizzabuttonapp.Views.BaseView
         type_id: type.id
 
     # Is there a previously placed order?
-    previous_order = pizzabuttonapp.State.user.get_previous_order()
-    if previous_order?
-      previous_order = previous_order.toJSON()
-      
-      # Was it placed recently?
-      minutes_ago = ((new Date()) - new Date(previous_order.createdAt)) / 60000
-      in_progress_order = previous_order if minutes_ago < 90
+    if @options.confirm_same?
+      previous_order = pizzabuttonapp.State.user.get_previous_order()
+      if previous_order?
+        previous_order = previous_order.toJSON()
+        
+        # Was it placed recently?
+        if @options.show_previous?
+          minutes_ago = ((new Date()) - new Date(previous_order.createdAt)) / 60000
+          in_progress_order = previous_order if minutes_ago < 90
 
     # Return this hash:
     in_progress_order:  in_progress_order if in_progress_order?
