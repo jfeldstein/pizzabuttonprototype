@@ -17,6 +17,7 @@ _.extend Parse.User.prototype,
         if @id?
           @get_orders().fetch 
             success: =>
+              @orders_are_fetched = true
               @trigger 'change:orders'
 
   get_addresses: ->

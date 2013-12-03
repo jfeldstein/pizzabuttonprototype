@@ -2,6 +2,7 @@
 
 class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
   routes:
+    'loading':         'loading'
     'orders/new':      'new_order'
     'additional_pizza':'additional_pizza'
     'wait_for_panic':  'wait_for_panic'
@@ -16,7 +17,19 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     'orders/confirm':  'confirm_order'
     'orders/change_restaurant': 'change_restaurant'
     'orders/:id':      'show_order'
-    '*path':           'new_order'
+    '*path':           'loading'
+
+  loading: ->
+    new ensureAndWaitFor
+      continue: => 
+        @navigate 'orders/new', 
+          trigger: true
+      continue_when: -> 
+        !pizzabuttonapp.State.user.id? || pizzabuttonapp.State.user.orders_are_fetched
+      give_up: => 
+        @navigate 'not_available',
+          trigger: true 
+      message: "The Pizza Button is loading..."
 
   new_order: ->
     pizzapicker = new pizzabuttonapp.Views.PizzaPickerView 

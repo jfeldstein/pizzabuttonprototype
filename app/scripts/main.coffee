@@ -61,6 +61,7 @@ window.pizzabuttonapp =
 
     pizzabuttonapp.State.order = new pizzabuttonapp.Models.OrderModel
       customer: pizzabuttonapp.State.user
+      
     getLocation (loc) =>
       @State.location = loc
       getRestaurants (restaurants) =>
