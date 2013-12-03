@@ -30,11 +30,8 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
 
     # Does not work when order is created by rotateOrder, and does not have an .id specified.
     (OrderModel.__super__.fetch.apply(this, [])).then => 
-      d = $.when @get_restaurant().fetch(), @get_delivery_address().fetch() 
-      d.then -> 
-        console.log("Succeeding", options.success?) 
+      @fetch_related().then ->
         options.success() if options.success?
-      d
 
   fetch_related: ->
     fetch_rest = $.Deferred (defer) =>

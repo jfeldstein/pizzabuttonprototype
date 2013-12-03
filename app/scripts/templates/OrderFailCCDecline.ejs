@@ -1,7 +1,7 @@
 <h1 class="js-header">Your Card Was Declined!</h1>
 
-<button class="js-resubmit">Swipe It Again!</button>
+<button class="action confirm js-resubmit">Swipe It Again!</button>
 
-<button class="js-change-card">Use A Different Card</button>
+<button class="action js-change-card">Use A Different Card</button>
 
-<a href="tel:<%= restaurant.phone %>">Call the Restaurant Yourself</a>
+<a class="button action" href="tel:<%= clean_phone(restaurant.phone) %>">Call The Restaurant</a>

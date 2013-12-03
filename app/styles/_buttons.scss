@@ -40,6 +40,12 @@ a.button.action {
   }
 }
 
+button.action, a.button {
+  &+button.action, &+a.button {
+    margin-top: 10px;
+  }
+}
+
 input[type=text], input[type=numbers] {
   box-sizing: border-box;
   width: 100%;
