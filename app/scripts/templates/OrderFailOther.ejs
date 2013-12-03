@@ -1,4 +1,4 @@
-<h1>This Is Embarassing...</h1>
+<h1 class="js-header">This Is Embarassing...</h1>
 
 <p>
   Something unexpected happened, and your order didn't go through.
@@ -8,6 +8,6 @@
   What would you like to do? 
 </p>
 
-<button class="js-rerun-order">Try Again</button>
+<button class="action confirm js-resubmit">Try Again</button>
 
-<a href="tel:<%= restaurant.phone %>">Call the Restaurant Yourself</a>
+<a class="button action" href="tel:<%= clean_phone(restaurant.phone) %>">Call The Restaurant</a>
