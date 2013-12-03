@@ -24,12 +24,18 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
       next_step: =>
         @navigate 'wait_for_panic', 
           trigger: true
-      show_previous_order: true
-      return_to_order: => 
-        in_progress_order = pizzabuttonapp.State.user.get_in_progress_order()
-        pizzabuttonapp.State.order = in_progress_order
-        @navigate "orders/#{in_progress_order.id}",
-          trigger: true
+      show_previous: => 
+        previous_order = pizzabuttonapp.State.user.get_previous_order()
+        pizzabuttonapp.State.order = previous_order
+        pizzabuttonapp.State.order.fetch_related().then => 
+          @navigate "orders/#{previous_order.id}",
+            trigger: true
+      confirm_same: =>
+        previous_order = pizzabuttonapp.State.user.get_previous_order()
+        previous_order.fetch_related().then =>
+          rotateOrder previous_order
+          @navigate 'orders/confirm',
+            trigger: true
     pizzapicker.render()
 
   additional_pizza: ->

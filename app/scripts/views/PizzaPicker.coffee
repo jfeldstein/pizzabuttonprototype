@@ -10,7 +10,8 @@ class pizzabuttonapp.Views.PizzaPickerView extends pizzabuttonapp.Views.BaseView
 
   events: 
     'click .js-add-pizza':        'add_pizza'
-    'click .js-return-to-order':  'return_to_order'
+    'click .js-show-previous':    'show_previous'
+    'click .js-confirm-same':     'confirm_same'
 
   template_data: ->
     # Rolls up individual pizzas into totals
@@ -35,19 +36,27 @@ class pizzabuttonapp.Views.PizzaPickerView extends pizzabuttonapp.Views.BaseView
         quantity: order_of_this_type.quantity
         type_id: type.id
 
-    # Is there a recent order? (Give the view null, or a hash)
-    in_progress_order = pizzabuttonapp.State.user.get_in_progress_order()
-    if in_progress_order?
-      in_progress_order = in_progress_order.toJSON()
+    # Is there a previously placed order?
+    previous_order = pizzabuttonapp.State.user.get_previous_order()
+    if previous_order?
+      previous_order = previous_order.toJSON()
+      
+      # Was it placed recently?
+      minutes_ago = ((new Date()) - new Date(previous_order.createdAt)) / 60000
+      in_progress_order = previous_order if minutes_ago < 90
 
     # Return this hash:
-    in_progress_order: in_progress_order if @options.show_previous_order
-    pizzas: pizza_selection
-    pizza_sizes: pizzabuttonapp.Config.pizza_sizes
+    in_progress_order:  in_progress_order if in_progress_order?
+    previous_order:     previous_order if previous_order?
+    pizzas:             pizza_selection
+    pizza_sizes:        pizzabuttonapp.Config.pizza_sizes
     has_selected_pizza: has_selected_pizza
 
-  return_to_order: ->
-    @options.return_to_order()
+  show_previous: ->
+    @options.show_previous()
+
+  confirm_same: ->
+    @options.confirm_same()
 
   add_pizza: (e) => 
     type_id = $(e.target).parents('[data-pizza-type-id]').data('pizza-type-id')

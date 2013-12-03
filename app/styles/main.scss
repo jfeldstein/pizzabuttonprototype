@@ -129,3 +129,16 @@ hr {
 .waiting-content {
   text-align: center;
 }
+
+.pizza-choice {
+  &.already-in-order {
+    button {
+      background-color: $color_green;
+      box-shadow: 0px 2px 0px $color_green_shadow;    
+    }
+  }
+
+  &+.pizza-choice {
+    margin-top: 10px;
+  }
+}

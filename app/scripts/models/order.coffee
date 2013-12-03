@@ -10,12 +10,13 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
 
   initialize: ->
     # Init pizzas
-    pizzas = {}
-    _.each pizzabuttonapp.Config.pizza_types, (type) =>
-      pizzas[type.id] = 
-        size_id: pizzabuttonapp.Config.pizza_sizes[2].id
-        quantity: 0
-    @set 'pizzas', pizzas
+    if not @has('pizzas')
+      pizzas = {}
+      _.each pizzabuttonapp.Config.pizza_types, (type) =>
+        pizzas[type.id] = 
+          size_id: pizzabuttonapp.Config.pizza_sizes[2].id
+          quantity: 0
+      @set 'pizzas', pizzas
 
     # Hack, if the order is created with an app-domain RestaurantModel object, put it where the get_restaurant hack expects it to be. 
     @restaurant = @get('restaurant') if @get('restaurant') instanceof pizzabuttonapp.Models.RestaurantModel
@@ -26,12 +27,26 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
   # then call whatever success handler came in at the top, if there was one.
   fetch: (options) ->
     console.log("Fetching order")
+
+    # Does not work when order is created by rotateOrder, and does not have an .id specified.
     (OrderModel.__super__.fetch.apply(this, [])).then => 
       d = $.when @get_restaurant().fetch(), @get_delivery_address().fetch() 
       d.then -> 
         console.log("Succeeding", options.success?) 
         options.success() if options.success?
       d
+
+  fetch_related: ->
+    fetch_rest = $.Deferred (defer) =>
+      @get_restaurant().fetch deferredHandlers(defer)
+
+    fetch_addr = $.Deferred (defer) =>
+      @get_delivery_address().fetch deferredHandlers(defer)
+
+    fetch_cc = $.Deferred (defer) =>
+      @get_billing_cc().fetch deferredHandlers(defer)
+
+    $.when fetch_rest, fetch_addr, fetch_cc
     
 
   summary: ->
@@ -81,9 +96,6 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
 
     @set 'pizzas', pizzas
 
-  #existing_size_id_for_type_id: (type_id) => 
-  #  return @get('pizzas')[type_id].size_id
-
   set_delivery_address: (address) ->
     @set_phone_number address.get_phone_number()
     @set 'delivery_address', address
@@ -95,6 +107,12 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
     @get 'phone_number'
 
   get_delivery_address: ->
+    if @get('delivery_address')? and !(@get('delivery_address') instanceof pizzabuttonapp.Models.AddressModel)
+      # Convert address to AddressModel
+      attrs    = @get('delivery_address').attributes
+      attrs.objectId = @get('delivery_address').id
+      @set 'delivery_address', new pizzabuttonapp.Models.AddressModel(attrs)
+
     @get 'delivery_address'
 
   get_billing_cc: ->
@@ -111,7 +129,11 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
     @set 'selected_tip', new_tip
 
   get_restaurant: ->
-    return null unless @has('restaurant')
+    if @get('restaurant')? and !(@get('restaurant') instanceof pizzabuttonapp.Models.RestaurantModel)
+      # Convert restaurant to RestaurantModel
+      attrs    = @get('restaurant').attributes
+      attrs.objectId = @get('restaurant').id
+      @set_restaurant new pizzabuttonapp.Models.RestaurantModel(attrs)
 
     # Hack, because fetching orders' related objects populates the order with native Parse objects, not our classes.
     @restaurant ||= new pizzabuttonapp.Models.RestaurantModel 

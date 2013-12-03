@@ -73,21 +73,25 @@ window.pizzabuttonapp =
 
     Backbone.history.start()
 
-window.rotateOrder = ->
-  attributes = pizzabuttonapp.State.order.attributes
+window.rotateOrder = (into = pizzabuttonapp.State.order) ->
+  attributes = into.attributes
 
   # Clean "ordered" state
   clean = ['error', 'charge_refunded_at', 'refund_error', 'stripe_chargeid', 'successfully_placed', 'total_charge']
   _(clean).each (key) -> delete attributes[key]
 
-  # Special treatment for related models
-  restaurant = pizzabuttonapp.State.order.get_restaurant()
   attributes['customer'] = pizzabuttonapp.State.user
-  attributes['address']  = pizzabuttonapp.State.order.get_delivery_address()
 
   pizzabuttonapp.State.order = new pizzabuttonapp.Models.OrderModel attributes
-  pizzabuttonapp.State.order.set_restaurant restaurant
+  pizzabuttonapp.State.order.set_restaurant into.get_restaurant()
+  pizzabuttonapp.State.order.set_delivery_address into.get_delivery_address()
   pizzabuttonapp.State.order
+
+window.deferredHandlers = (defer) ->
+  success: (resp) ->
+    defer.resolve resp
+  error: (e) ->
+    defer.reject e
 
 window.seedRestaurants = ->
   lm = new LocationManager

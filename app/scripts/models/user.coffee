@@ -67,14 +67,8 @@ _.extend Parse.User.prototype,
 
     @orders 
 
-  get_in_progress_order: ->
-    most_recent_order = @get_orders().at(0)
-
-    return null unless most_recent_order?
-
-    minutes_ago = ((new Date()) - most_recent_order.createdAt) / 60000
-
-    if minutes_ago < 90 then most_recent_order else null
+  get_previous_order: ->
+    @get_orders().at(0)
 
   has_primary_cc: ->
     @has('credit_card')
