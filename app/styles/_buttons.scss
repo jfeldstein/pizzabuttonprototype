@@ -40,8 +40,8 @@ a.button.action {
   }
 }
 
-button.action, a.button {
-  &+button.action, &+a.button {
+button.action, a.button, .action-container {
+  &+button.action, &+a.button, &+.action-container {
     margin-top: 10px;
   }
 }

@@ -163,6 +163,9 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
       change_address: =>
         @navigate 'addresses/new',
           trigger: true
+      change_card: =>
+        @navigate 'credit_cards/new',
+          trigger: true
     confirm_order.render()
 
   show_order: (id) ->

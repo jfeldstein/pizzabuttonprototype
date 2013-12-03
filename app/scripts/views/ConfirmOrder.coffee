@@ -9,11 +9,13 @@ class pizzabuttonapp.Views.ConfirmOrderView extends pizzabuttonapp.Views.BaseVie
       'click .js-confirm-order':        'confirm_order'
       'click .js-change-restaurant':    'select_new_restaunt'
       'click .js-change-address':       'select_new_address'
-      'click [data-tip-amount]':        'set_tip'
+      'click .js-tip-plus':             'plus_tip'
+      'click .js-tip-minus':            'minus_tip'
       'change .js-size-id':             'resize_pizza'
       'click .js-add-pizza':            'add_pizza'
       'click .js-remove-pizza':         'remove_pizza'
       'click .js-select-additional':    'select_additional'
+      'click .js-change-card':          'change_card'
 
     template_data: ->
       summary = @model.summary()
@@ -34,6 +36,8 @@ class pizzabuttonapp.Views.ConfirmOrderView extends pizzabuttonapp.Views.BaseVie
             size_id:   size.id
             subtotal:  qty * unit_price
 
+      tip_class = if (summary.selected_tip >= summary.total_pizzas*2) then 'confirm' else ''
+
       pizza_sizes:          pizzabuttonapp.Config.pizza_sizes
       pizza_types_in_order: pizza_types_in_order
       restaurant:           summary.restaurant
@@ -43,7 +47,8 @@ class pizzabuttonapp.Views.ConfirmOrderView extends pizzabuttonapp.Views.BaseVie
       grand_total:          summary.grand_total
       cc_last_four:         summary.billing_cc.last_four
       sub_total:            summary.pizza_total + pizzabuttonapp.Config.service_fee
-      service_fee:          pizzabuttonapp.Config.service_fee
+      service_fee:          summary.service_fee
+      tip_class:            tip_class
 
     confirm_order: ->
       @$('.js-confirm-order').attr('DISABLED', 'DISABLED').text('Placing Order...')
@@ -68,14 +73,14 @@ class pizzabuttonapp.Views.ConfirmOrderView extends pizzabuttonapp.Views.BaseVie
     select_additional: =>
       @options.select_additional()
 
-    set_tip: (e) =>
-      # Pull from view
-      new_tip = $(e.target).data('tip-amount')
-      
-      # Update the order's data
-      @model.set_tip new_tip
+    plus_tip: =>
+      @model.set_tip @model.get_tip()+1
+      @render()
 
-      # Update view
+    minus_tip: =>
+      new_tip = @model.get_tip()-1
+      new_tip = 0 if new_tip < 0
+      @model.set_tip new_tip
       @render()
 
     select_new_restaunt: ->
@@ -83,4 +88,7 @@ class pizzabuttonapp.Views.ConfirmOrderView extends pizzabuttonapp.Views.BaseVie
 
     select_new_address: ->
       @options.change_address()
+
+    change_card: => 
+      @options.change_card()
 
