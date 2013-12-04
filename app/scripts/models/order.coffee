@@ -47,10 +47,6 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
     
 
   summary: ->
-    count_pizzas = (memo, pizza_type) ->
-      memo + pizza_type.quantity
-    total_pizzas = _(@get('pizzas')).reduce count_pizzas, 0
-
     pizzas:       @get('pizzas')
     restaurant:   @get_restaurant().toJSON()    if @has('restaurant')
     selected_tip: @get('selected_tip')
@@ -59,14 +55,23 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
     grand_total:  @get_grand_total()            if @has('restaurant')
     delivery_address: @get_delivery_address().toJSON() if @has('delivery_address')
     customer:     @get_customer().toJSON()      if @has('customer')
-    total_pizzas: total_pizzas
-    service_fee:  pizzabuttonapp.Config.service_fee * total_pizzas
+    total_pizzas: @get_pizza_count()
+    service_fee:  @get_fee_total()
 
   get_customer: ->
     @get('customer')
 
+  get_pizza_count: ->
+    count_pizzas = (memo, pizza_type) ->
+      memo + pizza_type.quantity
+
+    _(@get('pizzas')).reduce count_pizzas, 0
+
+  get_fee_total: ->
+    pizzabuttonapp.Config.service_fee * @get_pizza_count()
+
   get_grand_total: ->
-    @get_pizza_total() + @get('selected_tip') + pizzabuttonapp.Config.service_fee
+    @get_pizza_total() + @get('selected_tip') + @get_fee_total()
 
   get_pizza_total: (restaurant = @get_restaurant()) -> 
     add_cost_of_pizza = (memo, picked, pizza_id) =>
