@@ -5,7 +5,6 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
   className: 'Order'
 
   defaults: 
-    pizzas: {}
     selected_tip: 0
 
   initialize: ->
@@ -167,6 +166,7 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
       success: options.success
       error: ->
         console.log "Failure saving order", arguments
+        options.error.call @, arguments
 
   is_successfully_placed: -> 
     !!@get('successfully_placed')

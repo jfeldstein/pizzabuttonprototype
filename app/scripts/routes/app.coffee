@@ -15,6 +15,8 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
     'ensure_cc':       'ensure_cc'
     'credit_cards/new':'new_credit_card'
     'orders/confirm':  'confirm_order'
+    'orders/fail':     'order_fail'
+    'submit_order':    'submit_order'
     'orders/change_restaurant': 'change_restaurant'
     'orders/:id':      'show_order'
     '*path':           'loading'
@@ -156,7 +158,8 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
         @navigate 'additional_pizza',
           trigger: true
       next_step: =>
-        @submit_order()
+        @navigate "submit_order",
+          trigger: true
       change_restaurant: =>
         @navigate 'orders/change_restaurant',
           trigger: true
@@ -186,7 +189,8 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
         model: pizzabuttonapp.State.order
         resubmit_order: =>
           rotateOrder()
-          @submit_order()
+          @navigate "submit_order",
+            trigger: true
         change_card: => 
           rotateOrder()
           @navigate 'credit_cards/new',
@@ -208,6 +212,17 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
       success: =>
         @navigate "orders/#{pizzabuttonapp.State.order.id}",
           trigger: true
+      error: =>
+        @navigate "orders/fail",
+          trigger: true
+
+  order_fail: ->
+    order_fail = new pizzabuttonapp.Views.OrderFailView
+      model: pizzabuttonapp.State.order
+      resubmit: => 
+        @navigate "submit_order",
+          trigger: true
+    order_fail.render()
 
 
   
