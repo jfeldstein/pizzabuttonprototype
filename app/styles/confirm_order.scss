@@ -15,3 +15,67 @@
     line-height: 38px;
   }
 }
+
+.money-extras {
+  font-size: 16px;
+
+  margin: 20px 0;
+
+  .label {
+    float: left;
+  }
+
+  .value {
+    float: right;
+  }
+
+  .total {
+    font-size: 20px;
+  }
+
+  > div:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+}
+
+.editable-block {
+  position: relative;
+  margin-bottom: 10px;
+
+  &:last-of-type {
+    margin-bottom: 20px;
+  }
+
+  &:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+
+  .label, .body {
+    float: left;
+  }
+
+  .edit {
+    float: right;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    background: url(/images/edit.png) center center no-repeat;
+    background-size: 100% 100%;
+  }
+
+  .label {
+    width: 60px;
+  }
+
+
+}

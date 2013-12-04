@@ -13,7 +13,7 @@
 
     <select class="js-size-id">
       <% for(var j=0; j<pizza_sizes.length; j++) { %>
-        <option value="<%= pizza_sizes[j].id %>" <%= (pizza_types_in_order[i].size_id==pizza_sizes[j].id) ? 'SELECTED' : '' %>><%= pizza_sizes[j].friendly_name %></option>
+        <option value="<%= pizza_sizes[j].id %>" <%= (pizza_types_in_order[i].size_id==pizza_sizes[j].id) ? 'SELECTED' : '' %>><%= pizza_sizes[j].id %></option>
       <% } %>
     </select>
 
@@ -28,58 +28,70 @@
 <button class="action js-select-additional">Add Something Else</button>
 
 <!-- Other charges underneath, should be smaller/grey -->
-<div class="action-container pizza">
-  <div class="action-container-button">
-    <%= money(service_fee) %>
+<div class="money-extras">
+  <div>
+    <span class="label">Service Fee</span>
+    <span class="value"><%= money(service_fee) %></span>
   </div>
 
-  Service Fee
-</div>
-
-<div class="action-container pizza">
-  <div class="action-container-button <%= tip_class %>">
-    <%= money(selected_tip) %>
+  <div>
+    <span class="label">
+      Include Tip?
+    </span>
+    <span class="value">
+      <button class="js-tip-plus">+</button>
+      <button class="js-tip-minus">-</button>
+      <%= money(selected_tip) %>
+    </span>
   </div>
 
-  Tip
-
-  <button class="js-tip-plus">+</button>
-  <button class="js-tip-minus">-</button>
-</div>
-
-<div class="action-container pizza">
-  <div class="action-container-button">
-    <%= money(grand_total) %>
+  <div class="total">
+    <span class="label">Total</span>
+    <span class="value"><%= money(grand_total) %></span>
   </div>
 
-  Total
+</div>
+
+
+<div class="editable-block">
+  <div class="edit js-change-restaurant"></div>
+
+  <div class="label">From:</div>
+
+  <div class="body">
+    <%= restaurant.name %>
+    <br />
+    <%= restaurant.address.street %>
+  </div>
 
 </div>
 
 
-<div class="action-container js-change-restaurant">
-  <div class="action-container-button"></div>
+<div class="editable-block">
+  <div class="edit js-change-address"></div>
 
-  <%= restaurant.name %>
-  <br />
-  <%= restaurant.address.street %>
+  <div class="label">To:</div>
 
-</div>
-
-<div class="action-container js-change-address">
-  <div class="action-container-button"></div>
-
-  <%= delivery_address.street %>
-  <br />
-  <%= phone(customer.phone_number) %> 
+  <div class="body">
+    <%= delivery_address.street %>
+    <br />
+    <%= phone(customer.phone_number) %> 
+  </div>
 
 </div>
 
-<div class="action-container js-change-card">
-  <div class="action-container-button"></div>
 
-  Charge to: **** <%= cc_last_four %>
+
+<div class="editable-block">
+  <div class="edit js-change-card"></div>
+
+  <div class="label">Charge:</div>
+
+  <div class="body">
+    Card ending in <%= cc_last_four %>
+  </div>
 
 </div>
+
 
 <button type="button" class="action confirm js-confirm-order">Place Order!</button>
