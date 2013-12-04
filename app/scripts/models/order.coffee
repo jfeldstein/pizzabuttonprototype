@@ -42,7 +42,10 @@ class pizzabuttonapp.Models.OrderModel extends Parse.Object
     fetch_cc = $.Deferred (defer) =>
       @get_billing_cc().fetch deferredHandlers(defer)
 
-    $.when fetch_rest, fetch_addr, fetch_cc
+    fetch_cust = $.Deferred (defer) =>
+      @get_customer().fetch deferredHandlers(defer)
+
+    $.when fetch_rest, fetch_addr, fetch_cc, fetch_cust
     
 
   summary: ->

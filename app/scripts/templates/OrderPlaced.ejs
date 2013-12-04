@@ -1,12 +1,75 @@
-<h1>It's on the way!</h1>
+<div class="receipt-container">
+  <div class="teeth top">&nbsp;</div>
+  <div class="receipt">
+    <img class="header" src="images/receipt-header.png" />
+    <div class="date-time left-right">
+      <div class="left">
+        Nov 20, 2013
+      </div>
+      <div class="right">
+        11:23PM
+      </div>
+    </div>
+    
+    <% for(var i=0; i<pizza_types_in_order.length; i++) { %>
+      <div class="line-item left-right">
+        <div class="left">
+          <%= pizza_types_in_order[i].quantity + 'x' %>
+          <%= pizza_types_in_order[i].size_id %>
+          <%= pizza_types_in_order[i].type.friendly_name %> <br />
+        </div>
+        <div class="right">
+          <%= money(pizza_types_in_order[i].subtotal) %>
+        </div>
+      </div>
 
-<p>Please allow 30-45 minutes for delivery</p>
+    <% } %>
 
-<p>If you need to contact the restaurant, dial:</p>
+    <div class="line-item left-right">
+      <div class="left">Service Fee</div>
+      <div class="right"><%= money(service_fee) %></div>
+    </div>
 
-<blockquote>
-  <%= restaurant.name %> <br />
-  <%= restaurant.phone %> 
-</blockquote>
+    <div class="line-item left-right">
+      <div class="left">+Tip</div>
+      <div class="right"><%= money(selected_tip) %></div>
+    </div>
 
+    <div class="line-item left-right">
+      <div class="left" style="padding-top: 24px;">Total</div>
+      <div class="right">
+        <span class="total-payment"><%= money(grand_total) %></span>
+      </div>
+    </div>
+
+
+    <div class="address">
+
+      <div class="label">From:</div>
+
+      <div class="address-body">
+        <%= restaurant.name %>
+        <br />
+        <%= restaurant.address.street %>
+      </div>
+
+    </div>
+
+
+    <div class="address">
+      <div class="label">To:</div>
+
+      <div class="address-body">
+        <%= customer.name %>
+        <br />
+        <%= delivery_address.street %>
+        <br />
+        <%= phone(customer.phone_number) %> 
+      </div>
+
+    </div>
+
+  </div>
+  <div class="teeth bottom">&nbsp;</div>
+</div>
 <button type="button" class="action js-new-order">Order Again</button>

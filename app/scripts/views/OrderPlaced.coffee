@@ -8,7 +8,37 @@ class pizzabuttonapp.Views.OrderPlacedView extends pizzabuttonapp.Views.BaseView
       'click .js-change-card':  'change_card'
 
     template_data: ->
-      @model.summary()
+      summary = @model.summary()
+
+      # Break out which pizzas to list
+      pizza_types_in_order = []
+      _.each pizzabuttonapp.Config.pizza_types, (type) =>
+        if summary.pizzas[type.id]? and summary.pizzas[type.id].quantity > 0
+          size = _.find pizzabuttonapp.Config.pizza_sizes, (this_size) ->
+            this_size.id == summary.pizzas[type.id].size_id
+
+          qty = summary.pizzas[type.id].quantity
+          unit_price = summary.restaurant.menu[type.id][size.id]
+
+          pizza_types_in_order.push 
+            type:      type
+            quantity:  qty
+            size_id:   size.id
+            subtotal:  qty * unit_price
+
+      tip_class = if (summary.selected_tip >= summary.total_pizzas*2) then 'confirm' else ''
+
+      pizza_sizes:          pizzabuttonapp.Config.pizza_sizes
+      pizza_types_in_order: pizza_types_in_order
+      restaurant:           summary.restaurant
+      delivery_address:     summary.delivery_address
+      customer:             summary.customer
+      selected_tip:         summary.selected_tip
+      grand_total:          summary.grand_total
+      cc_last_four:         summary.billing_cc.last_four
+      sub_total:            summary.pizza_total + pizzabuttonapp.Config.service_fee
+      service_fee:          summary.service_fee
+      tip_class:            tip_class
 
     initialize: ->
       @template = switch
