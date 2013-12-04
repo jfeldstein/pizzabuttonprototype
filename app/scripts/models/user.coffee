@@ -18,7 +18,7 @@ _.extend Parse.User.prototype,
           @get_orders().fetch 
             success: =>
               @orders_are_fetched = true
-              @trigger 'change:orders'
+              @trigger 'change:orders' # TODO: Move loading data before render to app.coffee
 
   get_addresses: ->
     # Can't fetch addresses from Parse if user is not yet saved
