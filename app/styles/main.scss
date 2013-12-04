@@ -148,10 +148,11 @@ hr {
   font-family: Monaco;
   background: #f3f3f3;
   box-sizing: border-box;
-  padding: 20px;
+  padding: 40px;
 
   .date-time {
     margin-bottom: 10px;
+    font-size: 12px;
   }
 
   .left-right {
@@ -172,16 +173,18 @@ hr {
   .total-payment {
     display: inline-block;
     box-sizing: border-box;
-    width: 135px;
-    height: 67px;
+    width: 95px;
+    height: 47px;
     text-align: center;
-    padding-top: 20px;
-    font-size: 25px;
+    padding-top: 10px;
+    font-size: 22px;
     background-image: url(/images/outline.png);
     background-size: 100% 100%;
+    margin-right: -30px;
   }
 
   .address {
+    margin-top: 10px;
     font-size: 12px;
 
     .label {
