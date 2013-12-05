@@ -205,6 +205,9 @@ Parse.Cloud.beforeSave("Order", function(request, response) {
     return response.success();
   }, function(error){
     // Save the object anyway, the client will deduce if everything worked. 
+    console.log("Setting order error to:")
+    console.log(error)
+
     order.set('successfully_placed', false);
     order.set('error', error);
 
