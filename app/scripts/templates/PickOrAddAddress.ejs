@@ -19,14 +19,14 @@
   </div>
   <div class="field address-row">
     <div class="address-field">
-      <input class="address-field" type="text" disabled='disabled' value="<%= new_address.city %>, <%= new_address.state %>" />
+      <input class="address-field" type="text" value="<%= new_address.city %>, <%= new_address.state %>" />
     </div>
     <div class="zip-code-field">
-      <input type="numbers" name="new_address[zip]" value="<%= new_address.zip %>" />
+      <input type="tel" name="new_address[zip]" value="<%= new_address.zip %>" />
     </div>
   </div>
   <div class="field">
-    <input type="numbers" name="new_address[phone_number]" value="<%= phone(new_address.phone_number) %>" placeholder="Phone Number..." />
+    <input type="tel" name="new_address[phone_number]" value="<%= phone(new_address.phone_number) %>" placeholder="Phone Number..." />
   </div>
 
   <button class="action js-use-new-address <%= (existing_addresses.length == 0) ? 'confirm' : '' %>" DISABLED='DISABLED'>Use New Address</button>

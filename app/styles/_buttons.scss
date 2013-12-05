@@ -46,7 +46,7 @@ button.action, a.button, .action-container {
   }
 }
 
-input[type=text], input[type=numbers] {
+input[type=text], input[type=number], input[type=tel] {
   box-sizing: border-box;
   width: 100%;
   padding-left: 10px;

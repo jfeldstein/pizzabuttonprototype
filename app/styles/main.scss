@@ -10,7 +10,7 @@ html, body {
 }
 
 body {
-  background-image: url("/images/pattern-bg.png");
+  background-image: url("../images/pattern-bg.png");
 }
 
 #container {
@@ -34,13 +34,13 @@ body {
       opacity: 1.0;
     }
     &.order {
-      background-image: url("/images/header-icons/order.png");
+      background-image: url("../images/header-icons/order.png");
     }
     &.address {
-      background-image: url("/images/header-icons/address.png");
+      background-image: url("../images/header-icons/address.png");
     }
     &.payment {
-      background-image: url("/images/header-icons/payment.png");
+      background-image: url("../images/header-icons/payment.png");
     }
   }
 }
@@ -99,7 +99,7 @@ hr {
   border-radius: $input_border_radius;
   width: 60px;
   height: 60px;
-  background: $color_red url(/images/next-arrow.png) center center no-repeat;
+  background: $color_red url(../images/next-arrow.png) center center no-repeat;
   background-size: 100% 100%;
 
   &.confirm {
