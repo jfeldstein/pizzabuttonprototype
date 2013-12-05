@@ -210,6 +210,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
   submit_order: ->
     pizzabuttonapp.State.order.submit
       success: =>
+        pizzabuttonapp.State.user.get_orders().add pizzabuttonapp.State.order, {at: 0}
         @navigate "orders/#{pizzabuttonapp.State.order.id}",
           trigger: true
       error: =>
