@@ -4,10 +4,13 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.Window;
@@ -16,6 +19,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+@SuppressLint("SetJavaScriptEnabled")
 public class MainActivity extends Activity implements LocationListener {
 
 	private WebView pizzaview;
@@ -28,16 +32,28 @@ public class MainActivity extends Activity implements LocationListener {
 		pizzaview = (WebView) findViewById(R.id.pizzaview);
 		
 		pizzaview.setWebChromeClient(new WebChromeClient() {
-			  public boolean onConsoleMessage(ConsoleMessage cm) {
-			    Log.d("MyApplication", cm.message() + " -- From line "
-			                         + cm.lineNumber() + " of "
-			                         + cm.sourceId() );
-			    return true;
-			  }
+				public boolean onConsoleMessage(ConsoleMessage cm) {
+				  Log.d("MyApplication", cm.message() + " -- From line "
+				                       + cm.lineNumber() + " of "
+				                       + cm.sourceId() );
+				  return true;
+				}
+				
+				public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				  if(url.contains("twitter.com")) {
+				    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+				    startActivity(i);
+				  } else {
+				    view.loadUrl(url);
+				  } 
+				  return true;
+				}
 			});
 		
 		// Allow Javascript and let it do whatever it wants.
 		WebSettings settings = pizzaview.getSettings();
+		String databasePath = this.getApplicationContext().getDir("databases", Context.MODE_PRIVATE).getPath();
+		settings.setDatabasePath(databasePath);
 		settings.setJavaScriptEnabled(true);
 		settings.setDomStorageEnabled(true); // Persist local storage
 		settings.setAllowFileAccessFromFileURLs(true); 
@@ -64,7 +80,7 @@ public class MainActivity extends Activity implements LocationListener {
 
 	@Override
 	public void onLocationChanged(Location location) {
-		pizzaview.loadUrl("javascript:setTimeout(\"locationUpdated("+location.getLatitude()+", "+location.getLongitude()+")\", 500)");
+		pizzaview.loadUrl("javascript:setTimeout(\"locationUpdated("+location.getLatitude()+", "+location.getLongitude()+")\", 1000)");
 	}
 
 	@Override
