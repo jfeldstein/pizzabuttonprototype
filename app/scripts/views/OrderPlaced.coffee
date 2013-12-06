@@ -59,6 +59,6 @@ class pizzabuttonapp.Views.OrderPlacedView extends pizzabuttonapp.Views.BaseView
       @options.change_card()
 
     brag: =>
-      share_url = 'http://twitter.com/home?status=I%20just%20ordered%20a%20pizza%20using%20@ThePizzaButton.%20The%20future%20is%20here:%20thepizzabutton.com'
+      share_url = 'http://twitter.com/intent/tweet?text=I%20just%20ordered%20a%20pizza%20using%20@ThePizzaButton.%20The%20future%20is%20here&url=thepizzabutton.com'
 
-      window.open = share_url
+      window.location = share_url
