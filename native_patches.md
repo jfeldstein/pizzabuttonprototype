@@ -79,6 +79,9 @@ Put `<item name="android:windowNoTitle">true</item>` inside default theme. (res/
 
 ## Capture back button to go to previous webview screen, or exit app.
 
+1. Capture the back button
+2. Hide 'non-steps' from browser history using `router.navigate('route', {replace: true})`
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) { 
@@ -94,3 +97,4 @@ Put `<item name="android:windowNoTitle">true</item>` inside default theme. (res/
         }
         return super.onKeyDown(keyCode, event);
     }
+
