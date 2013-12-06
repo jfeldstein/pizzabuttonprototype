@@ -2,6 +2,9 @@
 
 class pizzabuttonapp.Views.OrderPlacedView extends pizzabuttonapp.Views.BaseView
 
+    # template: ... (set in init)
+    active_view: "payment"
+
     events: 
       'click .js-new-order':    'new_order'
       'click .js-resubmit':     'resubmit_order'
