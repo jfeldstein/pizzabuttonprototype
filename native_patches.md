@@ -77,3 +77,20 @@ Put `<item name="android:windowNoTitle">true</item>` inside default theme. (res/
     }
 
 
+## Capture back button to go to previous webview screen, or exit app.
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) { 
+                //if Back key pressed and webview can navigate to previous page
+            webView.goBack();
+                // go back to previous page
+            return true;
+        }
+        else
+        {
+            finish();
+               // finish the activity
+        }
+        return super.onKeyDown(keyCode, event);
+    }

@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.Window;
 import android.webkit.ConsoleMessage;
@@ -99,6 +100,22 @@ public class MainActivity extends Activity implements LocationListener {
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if ((keyCode == KeyEvent.KEYCODE_BACK) && pizzaview.canGoBack()) { 
+	            //if Back key pressed and webview can navigate to previous page
+	        pizzaview.goBack();
+	            // go back to previous page
+	        return true;
+	    }
+	    else
+	    {
+	        finish();
+	           // finish the activity
+	    }
+	    return super.onKeyDown(keyCode, event);
 	}
 
 }
