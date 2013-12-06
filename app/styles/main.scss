@@ -157,6 +157,8 @@ hr {
 
   .header {
     width: 100%;
+    background-image: url(../images/receipt-header.png);
+    background-size: 100% 100%;
   }
 
   .total-payment {
@@ -167,7 +169,7 @@ hr {
     text-align: center;
     padding-top: 10px;
     font-size: 22px;
-    background-image: url(/images/outline.png);
+    background-image: url(../images/outline.png);
     background-size: 100% 100%;
     margin-right: -30px;
   }
@@ -189,7 +191,7 @@ hr {
 
 .teeth {
   display: block;
-  background: url(/images/receipt-tooth.png) transparent repeat-x;
+  background: url(../images/receipt-tooth.png) transparent repeat-x;
 
   &.top {
     -webkit-transform:rotate(180deg);
@@ -204,7 +206,7 @@ hr {
 .spinner {
   background-image: url(../images/spin.gif);
   height: 128px;
-  width: 50%;
+  width: 128px;
   margin: auto;
 }
 
