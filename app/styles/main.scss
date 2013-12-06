@@ -155,17 +155,6 @@ hr {
     font-size: 12px;
   }
 
-  .left-right {
-    & > .left {
-      display: -webkit-box;
-      -webkit-box-pack: bottom;
-      float: left;
-    }
-    & > .right {
-      text-align: right;
-    }
-  }
-
   .header {
     width: 100%;
   }
@@ -217,4 +206,15 @@ hr {
   height: 128px;
   width: 50%;
   margin: auto;
+}
+
+.left-right {
+  & > .left {
+    display: -webkit-box;
+    -webkit-box-pack: bottom;
+    float: left;
+  }
+  & > .right {
+    text-align: right;
+  }
 }
