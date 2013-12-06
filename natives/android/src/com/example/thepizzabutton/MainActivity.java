@@ -8,7 +8,12 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.Menu;
+import android.view.Window;
+import android.webkit.ConsoleMessage;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 public class MainActivity extends Activity implements LocationListener {
@@ -21,10 +26,26 @@ public class MainActivity extends Activity implements LocationListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		pizzaview = (WebView) findViewById(R.id.pizzaview);
-		pizzaview.getSettings().setJavaScriptEnabled(true);
-		pizzaview.getSettings().setDomStorageEnabled(true);
+		
+		pizzaview.setWebChromeClient(new WebChromeClient() {
+			  public boolean onConsoleMessage(ConsoleMessage cm) {
+			    Log.d("MyApplication", cm.message() + " -- From line "
+			                         + cm.lineNumber() + " of "
+			                         + cm.sourceId() );
+			    return true;
+			  }
+			});
+		
+		// Allow Javascript and let it do whatever it wants.
+		WebSettings settings = pizzaview.getSettings();
+		settings.setJavaScriptEnabled(true);
+		settings.setDomStorageEnabled(true); // Persist local storage
+		settings.setAllowFileAccessFromFileURLs(true); 
+		settings.setAllowUniversalAccessFromFileURLs(true);
+		
 		pizzaview.loadUrl("file:///android_asset/index.html");
 		
+		// Pass in location
 		locationMangaer = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_COARSE);
@@ -43,7 +64,7 @@ public class MainActivity extends Activity implements LocationListener {
 
 	@Override
 	public void onLocationChanged(Location location) {
-		pizzaview.loadUrl("javascript:setTimeout(\"locationUpdated("+location.getLatitude()+", "+location.getLongitude()+")\", 1000)");
+		pizzaview.loadUrl("javascript:setTimeout(\"locationUpdated("+location.getLatitude()+", "+location.getLongitude()+")\", 500)");
 	}
 
 	@Override
