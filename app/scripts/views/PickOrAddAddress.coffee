@@ -46,7 +46,7 @@ class pizzabuttonapp.Views.PickOrAddAddressView extends pizzabuttonapp.Views.Bas
       @$('.js-use-new-address').attr 'disabled', !@valid()
 
     use_new_address: ->
-      # TODO: Disable button 
+      @$('.js-use-new-address').attr('disabled', true).text('Saving Address...')
       
       @new_address.set 
         street: @get_street_value()
