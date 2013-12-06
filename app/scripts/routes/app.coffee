@@ -39,6 +39,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
       next_step: =>
         @navigate 'wait_for_panic', 
           trigger: true
+          replace: true
       show_previous: => 
         previous_order = pizzabuttonapp.State.user.get_previous_order()
         pizzabuttonapp.State.order = previous_order
@@ -70,6 +71,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
         else 
           @navigate 'wait_for_loc', 
             trigger: true
+            replace: true
       continue_when: -> 
         pizzabuttonapp.State.panic?
       give_up: => 
@@ -82,6 +84,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
       continue: =>
         @navigate "wait_for_restaurants", 
           trigger: true
+          replace: true
       continue_when: -> 
         pizzabuttonapp.State.location? 
       give_up: => 
@@ -141,6 +144,7 @@ class pizzabuttonapp.Routers.AppRouter extends Backbone.Router
       next_step: =>
         @navigate 'ensure_cc',
           trigger: true
+          replace: true
     pick_or_add_address.render()
 
   new_credit_card: ->
