@@ -98,3 +98,43 @@ Put `<item name="android:windowNoTitle">true</item>` inside default theme. (res/
         return super.onKeyDown(keyCode, event);
     }
 
+
+## IPHONE: Open twitter urls in at least safari, if not native twitter app. 
+
+    - (BOOL)webView:(UIWebView *)webView2
+    shouldStartLoadWithRequest:(NSURLRequest *)request
+     navigationType:(UIWebViewNavigationType)navigationType {
+        
+        NSString *requestString = [[[request URL] absoluteString] stringByReplacingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
+        
+        if([requestString rangeOfString:@"twitter.com"].location != NSNotFound) {
+            if ([[UIApplication sharedApplication] canOpenURL:[request URL]]) {
+                [[UIApplication sharedApplication] openURL:[request URL]];
+                return NO;
+            }
+        }
+        
+        return YES;
+    }
+
+
+## IPHONE: Route console log to NSLog
+
+    - (BOOL)webView:(UIWebView *)webView2
+    shouldStartLoadWithRequest:(NSURLRequest *)request
+     navigationType:(UIWebViewNavigationType)navigationType {
+        
+        NSString *requestString = [[[request URL] absoluteString] stringByReplacingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
+        
+        if ([requestString hasPrefix:@"ios-log:"]) {
+            NSString* logString = [[requestString componentsSeparatedByString:@":#iOS#"] objectAtIndex:1];
+            NSLog(@"UIWebView console: %@", logString);
+            return NO;
+        }
+        
+        return YES;
+    }
+
+## IPHONE: Make LocalStorage persistent
+
+ * Use: https://gist.github.com/walm/2565759
