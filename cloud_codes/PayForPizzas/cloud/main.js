@@ -152,7 +152,7 @@ Parse.Cloud.beforeSave("Order", function(request, response) {
 
     var rest_data = {
       name: restaurant.get('name'),
-      phone_number: restaurant.get('phone_number')
+      phone: restaurant.get('phone_number')
     };
 
     var email_content = _.template(template, {
