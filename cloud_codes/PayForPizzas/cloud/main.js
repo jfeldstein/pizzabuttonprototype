@@ -152,7 +152,7 @@ Parse.Cloud.beforeSave("Order", function(request, response) {
 
     var rest_data = {
       name: restaurant.get('name'),
-      phone_number: restaurant.get('phone_number')
+      phone: restaurant.get('phone')
     };
 
     var email_content = _.template(template, {
@@ -168,10 +168,12 @@ Parse.Cloud.beforeSave("Order", function(request, response) {
       }
     });
 
+    var timeStr = (new Date()).toISOString();
+
     return Mailgun.sendEmail({
       to: "orders@thepizzabutton.com",
       from: "Mailgun@CloudCode.com",
-      subject: "New Order!",
+      subject: "New Order! "+timeStr,
       text: email_content
     }).then(function(){
 

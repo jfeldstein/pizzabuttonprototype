@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "AppDelegate.h"
 
 @interface ViewController ()
 
@@ -50,7 +51,13 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
  navigationType:(UIWebViewNavigationType)navigationType {
     
     NSString *requestString = [[[request URL] absoluteString] stringByReplacingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
-    //NSLog(requestString);
+    
+    if([requestString rangeOfString:@"twitter.com"].location != NSNotFound) {
+        if ([[UIApplication sharedApplication] canOpenURL:[request URL]]) {
+            [[UIApplication sharedApplication] openURL:[request URL]];
+            return NO;
+        }
+    }
     
     if ([requestString hasPrefix:@"ios-log:"]) {
         NSString* logString = [[requestString componentsSeparatedByString:@":#iOS#"] objectAtIndex:1];
@@ -60,5 +67,14 @@ shouldStartLoadWithRequest:(NSURLRequest *)request
     
     return YES;
 }
+
+
+- (void)webViewDidStartLoad:(UIWebView *)theWebView
+{
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    [appDelegate copyPersistentStorageToLocalStorage];
+}
+
 
 @end
