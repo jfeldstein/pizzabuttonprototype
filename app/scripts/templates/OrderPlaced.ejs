@@ -1,7 +1,7 @@
 <div class="receipt-container">
   <div class="teeth top">&nbsp;</div>
   <div class="receipt">
-    <img class="header" src="images/receipt-header.png" />
+    <div class="header">&nbsp;</div>
     <div class="date-time left-right">
       <div class="left">
         Nov 20, 2013
@@ -73,4 +73,9 @@
   </div>
   <div class="teeth bottom">&nbsp;</div>
 </div>
-<button type="button" class="action js-new-order">Order Again</button>
+
+<button type="button" style="width: 49%; float: right;" class="action confirm js-brag">Brag</button>
+
+<button type="button" style="width: 49%;" class="action confirm js-new-order">Start Over</button>
+
+<a href="tel:<%= clean_phone(restaurant.phone) %>" type="button" class="button action">Call Restaurant</a>

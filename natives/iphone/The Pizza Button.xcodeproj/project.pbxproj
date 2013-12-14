@@ -478,6 +478,7 @@
 				4C7FF1E218427C1900D4B54D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4C7FF1E318427C1900D4B54D /* Build configuration list for PBXNativeTarget "The Pizza ButtonTests" */ = {
 			isa = XCConfigurationList;
@@ -486,6 +487,7 @@
 				4C7FF1E518427C1900D4B54D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -4,13 +4,23 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.Window;
+import android.webkit.ConsoleMessage;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+@SuppressLint("SetJavaScriptEnabled")
 public class MainActivity extends Activity implements LocationListener {
 
 	private WebView pizzaview;
@@ -21,10 +31,38 @@ public class MainActivity extends Activity implements LocationListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		pizzaview = (WebView) findViewById(R.id.pizzaview);
-		pizzaview.getSettings().setJavaScriptEnabled(true);
-		pizzaview.getSettings().setDomStorageEnabled(true);
+		
+		pizzaview.setWebChromeClient(new WebChromeClient() {
+				public boolean onConsoleMessage(ConsoleMessage cm) {
+				  Log.d("MyApplication", cm.message() + " -- From line "
+				                       + cm.lineNumber() + " of "
+				                       + cm.sourceId() );
+				  return true;
+				}
+				
+				public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				  if(url.contains("twitter.com")) {
+				    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+				    startActivity(i);
+				  } else {
+				    view.loadUrl(url);
+				  } 
+				  return true;
+				}
+			});
+		
+		// Allow Javascript and let it do whatever it wants.
+		WebSettings settings = pizzaview.getSettings();
+		String databasePath = this.getApplicationContext().getDir("databases", Context.MODE_PRIVATE).getPath();
+		settings.setDatabasePath(databasePath);
+		settings.setJavaScriptEnabled(true);
+		settings.setDomStorageEnabled(true); // Persist local storage
+		settings.setAllowFileAccessFromFileURLs(true); 
+		settings.setAllowUniversalAccessFromFileURLs(true);
+		
 		pizzaview.loadUrl("file:///android_asset/index.html");
 		
+		// Pass in location
 		locationMangaer = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_COARSE);
@@ -62,6 +100,22 @@ public class MainActivity extends Activity implements LocationListener {
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if ((keyCode == KeyEvent.KEYCODE_BACK) && pizzaview.canGoBack()) { 
+	            //if Back key pressed and webview can navigate to previous page
+	        pizzaview.goBack();
+	            // go back to previous page
+	        return true;
+	    }
+	    else
+	    {
+	        finish();
+	           // finish the activity
+	    }
+	    return super.onKeyDown(keyCode, event);
 	}
 
 }

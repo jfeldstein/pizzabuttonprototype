@@ -61,6 +61,8 @@ class pizzabuttonapp.Views.PizzaPickerView extends pizzabuttonapp.Views.BaseView
     @options.confirm_same()
 
   add_pizza: (e) => 
+    # TODO: Disable button 
+    
     type_id = $(e.target).parents('[data-pizza-type-id]').data('pizza-type-id')
     @model.add_pizza(type_id)
     @options.next_step()

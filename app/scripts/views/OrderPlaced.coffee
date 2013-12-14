@@ -2,10 +2,14 @@
 
 class pizzabuttonapp.Views.OrderPlacedView extends pizzabuttonapp.Views.BaseView
 
+    # template: ... (set in init)
+    active_view: "payment"
+
     events: 
       'click .js-new-order':    'new_order'
       'click .js-resubmit':     'resubmit_order'
       'click .js-change-card':  'change_card'
+      'click .js-brag':         'brag'
 
     template_data: ->
       summary = @model.summary()
@@ -56,3 +60,8 @@ class pizzabuttonapp.Views.OrderPlacedView extends pizzabuttonapp.Views.BaseView
 
     change_card: => 
       @options.change_card()
+
+    brag: =>
+      share_url = 'http://twitter.com/intent/tweet?text=I%20just%20ordered%20a%20pizza%20using%20@ThePizzaButton.%20The%20future%20is%20here&url=thepizzabutton.com'
+
+      window.location = share_url
